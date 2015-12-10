@@ -9,8 +9,8 @@ public class Area extends Actor {
     public Area(int x, int y) {
         super(x, y);
 
-        //URL loc = this.getClass().getResource("/area.png");
-        ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\area.png");
+        URL loc = this.getClass().getResource("\\res\\area.png");
+        ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
     }

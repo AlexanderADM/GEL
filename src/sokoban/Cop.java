@@ -8,30 +8,34 @@ public class Cop extends Actor {
 
     public Cop(int x, int y) {
         super(x, y);
-        //URL loc = this.getClass().getResource("/sokoban.png");
-        ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\cop.png");
+        URL loc = this.getClass().getResource("\\res\\cop.png");
+        ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
     }
 
     public void move(int x, int y, String cmd) {
         if(cmd.equals("l")){
-            ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\cop_l.png");
+            URL loc = this.getClass().getResource("\\res\\cop_l.png");
+            ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }
         else if(cmd.equals("r")){
-            ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\cop_r.png");
+            URL loc = this.getClass().getResource("\\res\\cop_r.png");
+            ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }
         else if(cmd.equals("u")){
-            ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\cop_u.png");
+            URL loc = this.getClass().getResource("\\res\\cop_u.png");
+            ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }
         else if(cmd.equals("d")){
-            ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\cop_d.png");
+            URL loc = this.getClass().getResource("\\res\\cop_d.png");
+            ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }

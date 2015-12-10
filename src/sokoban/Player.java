@@ -9,8 +9,8 @@ public class Player extends Actor {
     public Player(int x, int y) {
         super(x, y);
 
-        //URL loc = this.getClass().getResource("/sokoban.png");
-        ImageIcon iia = new ImageIcon("C:\\Users\\Adrian\\Desktop\\Java Projects\\Sokoban\\src\\sokoban\\res\\player.png");
+        URL loc = this.getClass().getResource("\\res\\sokoban.png");
+        ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
     }
