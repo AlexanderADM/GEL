@@ -2,7 +2,6 @@ package GEL;
 
 import javax.swing.JFrame;
 
-
 public final class GEL extends JFrame {
 
     private final int OFFSET = 30;

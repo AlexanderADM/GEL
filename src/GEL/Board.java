@@ -22,13 +22,14 @@ public class Board extends JPanel {
     private ArrayList Thief = new ArrayList();
     private ArrayList Cop = new ArrayList();
     private Thief soko;
+    private Cop banana;
     private int w = 0;
     private int h = 0;
     private boolean completed = false;
     
     private String level =
               "##################################\n"
-            + "#@    #############    #######   #\n"
+            + "#@    #############    #######  %#\n"
             + "#     #############              #\n"
             + "#        ###                     #\n"
             + "#                                #\n"
@@ -95,6 +96,9 @@ public class Board extends JPanel {
             } else if (item == '@') {
                 soko = new Thief(x, y);
                 x += SPACE;
+            } else if (item == '%') {
+                banana = new Cop(x, y);
+                x += SPACE;
             } else if (item == ' ') {
                 x += SPACE;
             }
@@ -113,6 +117,7 @@ public class Board extends JPanel {
         world.addAll(areas);
         world.addAll(baggs);
         world.add(soko);
+        world.add(banana);
 
         for (int i = 0; i < world.size(); i++) {
 
