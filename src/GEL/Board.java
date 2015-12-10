@@ -103,6 +103,7 @@ public class Board extends JPanel {
                 x += SPACE;
             }else if  (item == '%'){
                 c = new Cop(x, y);
+                Cop.add(c);
                 x += SPACE;
             }else if (item == ' ') {
                 x += SPACE;
