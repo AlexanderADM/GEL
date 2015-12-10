@@ -1,4 +1,4 @@
-package sokoban;
+package GEL;
 
 import javax.swing.JFrame;
 

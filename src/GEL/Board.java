@@ -1,4 +1,4 @@
-package sokoban;
+package GEL;
 
 import java.awt.Color;
 import java.awt.Graphics;

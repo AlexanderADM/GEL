@@ -1,14 +1,15 @@
-package sokoban;
+package GEL;
 
 import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
-public class Cop extends Actor {
+public class Thief extends Actor {
 
-    public Cop(int x, int y) {
+    public Thief(int x, int y) {
         super(x, y);
-        URL loc = this.getClass().getResource("\\res\\cop.png");
+
+        URL loc = this.getClass().getResource("\\res\\player.png");
         ImageIcon iia = new ImageIcon(loc);
         Image image = iia.getImage();
         this.setImage(image);
@@ -16,25 +17,25 @@ public class Cop extends Actor {
 
     public void move(int x, int y, String cmd) {
         if(cmd.equals("l")){
-            URL loc = this.getClass().getResource("\\res\\cop_l.png");
+            URL loc = this.getClass().getResource("\\res\\player_l.png");
             ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }
         else if(cmd.equals("r")){
-            URL loc = this.getClass().getResource("\\res\\cop_r.png");
+            URL loc = this.getClass().getResource("\\res\\player_r.png");
             ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }
         else if(cmd.equals("u")){
-            URL loc = this.getClass().getResource("\\res\\cop_u.png");
+            URL loc = this.getClass().getResource("\\res\\player_u.png");
             ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);
         }
         else if(cmd.equals("d")){
-            URL loc = this.getClass().getResource("\\res\\cop_d.png");
+            URL loc = this.getClass().getResource("\\res\\player_d.png");
             ImageIcon iia = new ImageIcon(loc);
             Image image = iia.getImage();
             this.setImage(image);

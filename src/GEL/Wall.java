@@ -1,4 +1,4 @@
-package sokoban;
+package GEL;
 
 import java.awt.Image;
 import java.net.URL;
