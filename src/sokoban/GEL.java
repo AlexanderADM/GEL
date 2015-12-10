@@ -3,11 +3,11 @@ package sokoban;
 import javax.swing.JFrame;
 
 
-public final class Sokoban extends JFrame {
+public final class GEL extends JFrame {
 
     private final int OFFSET = 30;
 
-    public Sokoban() {
+    public GEL() {
         InitUI();
     }
 
@@ -19,12 +19,12 @@ public final class Sokoban extends JFrame {
         setSize(board.getBoardWidth() + OFFSET,
                 board.getBoardHeight() + 2*OFFSET);
         setLocationRelativeTo(null);
-        setTitle("Sokoban");
+        setTitle("Guardie e Ladri");
     }
 
 
     public static void main(String[] args) {
-        Sokoban sokoban = new Sokoban();
-        sokoban.setVisible(true);
+        GEL GEL = new GEL();
+        GEL.setVisible(true);
     }
 }
