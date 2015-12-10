@@ -20,6 +20,7 @@ public class Board extends JPanel {
     private ArrayList baggs = new ArrayList();
     private ArrayList areas = new ArrayList();
     private ArrayList Thief = new ArrayList();
+    private ArrayList Cop = new ArrayList();
     private Thief soko;
     private int w = 0;
     private int h = 0;
