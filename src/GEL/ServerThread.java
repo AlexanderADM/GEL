@@ -13,12 +13,16 @@ public class ServerThread implements Runnable{
     private int port = 8080;
 
     public void run(){
-        try {
-            sSock = new ServerSocket(port);
-            con = sSock.accept();
-            new ClientThread(con);
-        } catch (IOException e) {
-            e.printStackTrace();
+        while(true) {
+            try {
+
+                sSock = new ServerSocket(port);
+                con = sSock.accept();
+                new ClientThread(con);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

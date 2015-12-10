@@ -19,8 +19,8 @@ public class Board extends JPanel {
     private ArrayList walls = new ArrayList();
     private ArrayList baggs = new ArrayList();
     private ArrayList areas = new ArrayList();
-    private ArrayList Thief = new ArrayList();
-    private ArrayList Cop = new ArrayList();
+    private static ArrayList Thief = new ArrayList();
+    private static ArrayList Cop = new ArrayList();
     private Thief soko;
     private int w = 0;
     private int h = 0;
@@ -58,7 +58,12 @@ public class Board extends JPanel {
     public int getBoardHeight() {
         return this.h;
     }
-
+    public static int getThiefCount(){
+        return Thief.size();
+    }
+    public static int getCopCount(){
+        return Cop.size();
+    }
     public final void initWorld() {
         
         int x = OFFSET;
@@ -67,6 +72,7 @@ public class Board extends JPanel {
         Wall wall;
         Baggage b;
         Area a;
+        Cop c;
 
 
         for (int i = 0; i < level.length(); i++) {
@@ -95,7 +101,10 @@ public class Board extends JPanel {
             } else if (item == '@') {
                 soko = new Thief(x, y);
                 x += SPACE;
-            } else if (item == ' ') {
+            }else if  (item == '%'){
+                c = new Cop(x, y);
+                x += SPACE;
+            }else if (item == ' ') {
                 x += SPACE;
             }
 
@@ -153,11 +162,12 @@ public class Board extends JPanel {
 
 
             if (key == KeyEvent.VK_LEFT) {
-                if (checkWallCollision(soko,
-                        LEFT_COLLISION)) {
+                if (checkWallCollision(soko, LEFT_COLLISION)) {
                     return;
                 }
-
+                if(checkPlayerCollision(soko, LEFT_COLLISION)){
+                    return;
+                }
                 if (checkBagCollision(LEFT_COLLISION)) {
                     return;
                 }
@@ -166,8 +176,7 @@ public class Board extends JPanel {
 
             } else if (key == KeyEvent.VK_RIGHT) {
 
-                if (checkWallCollision(soko,
-                        RIGHT_COLLISION)) {
+                if (checkWallCollision(soko, RIGHT_COLLISION)) {
                     return;
                 }
 
@@ -179,8 +188,7 @@ public class Board extends JPanel {
 
             } else if (key == KeyEvent.VK_UP) {
 
-                if (checkWallCollision(soko,
-                        TOP_COLLISION)) {
+                if (checkWallCollision(soko, TOP_COLLISION)) {
                     return;
                 }
 
@@ -192,8 +200,7 @@ public class Board extends JPanel {
 
             } else if (key == KeyEvent.VK_DOWN) {
 
-                if (checkWallCollision(soko,
-                        BOTTOM_COLLISION)) {
+                if (checkWallCollision(soko, BOTTOM_COLLISION)) {
                     return;
                 }
 
@@ -211,6 +218,23 @@ public class Board extends JPanel {
         }
     }
 
+    private boolean checkPlayerCollision(Actor actor, int type){
+        if(type == LEFT_COLLISION) {
+
+            for (int i = 0; i < Cop.size(); i++) {
+                Cop cops = (Cop) Cop.get(i);
+                for (int j = 0; j < Thief.size(); i++) {
+                    Thief thiefs = (Thief) Thief.get(i);
+                    if (thiefs.isLeftCollision(cops)) {
+                        System.err.println("LEFT COLLISION");
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
     private boolean checkWallCollision(Actor actor, int type) {
 
         if (type == LEFT_COLLISION) {
@@ -272,8 +296,7 @@ public class Board extends JPanel {
                                 return true;
                             }
                         }
-                        if (checkWallCollision(bag,
-                                LEFT_COLLISION)) {
+                        if (checkWallCollision(bag, LEFT_COLLISION)) {
                             return true;
                         }
                     }
@@ -297,8 +320,7 @@ public class Board extends JPanel {
                                 return true;
                             }
                         }
-                        if (checkWallCollision(bag,
-                                RIGHT_COLLISION)) {
+                        if (checkWallCollision(bag, RIGHT_COLLISION)) {
                             return true;
                         }
                     }
@@ -322,8 +344,7 @@ public class Board extends JPanel {
                                 return true;
                             }
                         }
-                        if (checkWallCollision(bag,
-                                TOP_COLLISION)) {
+                        if (checkWallCollision(bag, TOP_COLLISION)) {
                             return true;
                         }
                     }
@@ -348,8 +369,7 @@ public class Board extends JPanel {
                                 return true;
                             }
                         }
-                        if (checkWallCollision(bag,
-                                BOTTOM_COLLISION)) {
+                        if (checkWallCollision(bag, BOTTOM_COLLISION)) {
                             return true;
                         }
                     }

@@ -30,11 +30,11 @@ public class ClientThread implements Runnable{
 
             while(true){
                 squad = br.readLine();
-                if(squad.equalsIgnoreCase("ladri")){
+                if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() < 10){
                     pw.println("ok");
                     pw.flush();
                     break;
-                }else if(squad.equalsIgnoreCase("guardie")){
+                }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() < 10){
                     pw.println("ok");
                     pw.flush();
                     break;
@@ -47,7 +47,7 @@ public class ClientThread implements Runnable{
             System.err.println("Waiting for client username: ");
             do{
                 name = br.readLine();
-            }while(name.length() == 0 || name == null || name.length() < 2);
+            }while(name.length() == 0 || name != null || name.length() < 2);
 
 
         }catch(IOException e){
