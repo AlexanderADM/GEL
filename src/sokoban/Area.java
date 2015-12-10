@@ -10,7 +10,7 @@ public class Area extends Actor {
         super(x, y);
 
         //URL loc = this.getClass().getResource("/area.png");
-        ImageIcon iia = new ImageIcon("C:\\Users\\Adrian\\Desktop\\Java Projects\\Sokoban\\src\\sokoban\\res\\area.png");
+        ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\area.png");
         Image image = iia.getImage();
         this.setImage(image);
     }

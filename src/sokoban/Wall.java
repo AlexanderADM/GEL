@@ -13,7 +13,7 @@ public class Wall extends Actor {
 
         //URL loc = this.getClass().getResource("wall.png");
         //System.err.println(this.getClass().getResource("/res/wall.png"));
-        ImageIcon iia = new ImageIcon("C:\\Users\\Adrian\\Desktop\\Java Projects\\Sokoban\\src\\sokoban\\res\\wall.png");
+        ImageIcon iia = new ImageIcon("D:\\Java\\2015-2016\\NetBeans\\Sokoban\\src\\sokoban\\res\\wall.png");
         image = iia.getImage();
         this.setImage(image);
 

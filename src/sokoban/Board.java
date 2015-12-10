@@ -19,7 +19,8 @@ public class Board extends JPanel {
     private ArrayList walls = new ArrayList();
     private ArrayList baggs = new ArrayList();
     private ArrayList areas = new ArrayList();
-    private Player soko;
+    private ArrayList Thief = new ArrayList();
+    private Thief soko;
     private int w = 0;
     private int h = 0;
     private boolean completed = false;
@@ -91,7 +92,7 @@ public class Board extends JPanel {
                 areas.add(a);
                 x += SPACE;
             } else if (item == '@') {
-                soko = new Player(x, y);
+                soko = new Thief(x, y);
                 x += SPACE;
             } else if (item == ' ') {
                 x += SPACE;
@@ -110,13 +111,13 @@ public class Board extends JPanel {
         world.addAll(walls);
         world.addAll(areas);
         world.addAll(baggs);
-        world.add(soko);
+        world.addAll(Thief);
 
         for (int i = 0; i < world.size(); i++) {
 
             Actor item = (Actor) world.get(i);
 
-            if ((item instanceof Player)
+            if ((item instanceof Thief)
                     || (item instanceof Baggage)) {
                 g.drawImage(item.getImage(), item.x() + 2, item.y() + 2, this);
             } else {
@@ -160,7 +161,7 @@ public class Board extends JPanel {
                     return;
                 }
 
-                soko.move(-SPACE, 0);
+                soko.move(-SPACE, 0, "l");
 
             } else if (key == KeyEvent.VK_RIGHT) {
 
@@ -173,7 +174,7 @@ public class Board extends JPanel {
                     return;
                 }
 
-                soko.move(SPACE, 0);
+                soko.move(SPACE, 0, "r");
 
             } else if (key == KeyEvent.VK_UP) {
 
@@ -186,7 +187,7 @@ public class Board extends JPanel {
                     return;
                 }
 
-                soko.move(0, -SPACE);
+                soko.move(0, -SPACE, "u");
 
             } else if (key == KeyEvent.VK_DOWN) {
 
@@ -199,7 +200,7 @@ public class Board extends JPanel {
                     return;
                 }
 
-                soko.move(0, SPACE);
+                soko.move(0, SPACE, "d");
 
             } else if (key == KeyEvent.VK_R) {
                 restartLevel();
