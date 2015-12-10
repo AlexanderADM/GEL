@@ -1,2 +1,2 @@
 # GEL
-CIAO sono mamrkop:Thieves and Cops
+CIAO sono mamrkopssskasfopjasdiohdasiThieves and Cops
