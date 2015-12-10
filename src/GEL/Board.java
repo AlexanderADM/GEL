@@ -10,21 +10,22 @@ import javax.swing.JPanel;
 public class Board extends JPanel { 
 
     private final int OFFSET = 30;
-    private final int SPACE = 20;
-    private final int LEFT_COLLISION = 1;
-    private final int RIGHT_COLLISION = 2;
-    private final int TOP_COLLISION = 3;
-    private final int BOTTOM_COLLISION = 4;
+    private static final int SPACE = 20;
+    private static final int LEFT_COLLISION = 1;
+    private static final int RIGHT_COLLISION = 2;
+    private static final int TOP_COLLISION = 3;
+    private static final int BOTTOM_COLLISION = 4;
 
-    private ArrayList walls = new ArrayList();
-    private ArrayList baggs = new ArrayList();
-    private ArrayList areas = new ArrayList();
-    private static ArrayList Thief = new ArrayList();
-    private static ArrayList Cop = new ArrayList();
-    private Thief soko;
+    private static ArrayList walls = new ArrayList();
+    private static ArrayList baggs = new ArrayList();
+    private static ArrayList areas = new ArrayList();
+    private static ArrayList thiefs = new ArrayList();
+    private static ArrayList cops = new ArrayList();
+    protected static int PlayerID = 0;
+    private static Thief soko;
     private int w = 0;
     private int h = 0;
-    private boolean completed = false;
+    private static boolean completed = false;
     
     private String level =
               "##################################\n"
@@ -59,10 +60,10 @@ public class Board extends JPanel {
         return this.h;
     }
     public static int getThiefCount(){
-        return Thief.size();
+        return thiefs.size();
     }
     public static int getCopCount(){
-        return Cop.size();
+        return cops.size();
     }
     public final void initWorld() {
         
@@ -103,7 +104,7 @@ public class Board extends JPanel {
                 x += SPACE;
             }else if  (item == '%'){
                 c = new Cop(x, y);
-                Cop.add(c);
+                cops.add(c);
                 x += SPACE;
             }else if (item == ' ') {
                 x += SPACE;
@@ -122,6 +123,7 @@ public class Board extends JPanel {
         world.addAll(walls);
         world.addAll(areas);
         world.addAll(baggs);
+        world.addAll(cops);
         world.add(soko);
 
         for (int i = 0; i < world.size(); i++) {
@@ -166,7 +168,7 @@ public class Board extends JPanel {
                 if (checkWallCollision(soko, LEFT_COLLISION)) {
                     return;
                 }
-                if(checkPlayerCollision(soko, LEFT_COLLISION)){
+                if(checkPlayerCollision(LEFT_COLLISION)){
                     return;
                 }
                 if (checkBagCollision(LEFT_COLLISION)) {
@@ -218,25 +220,35 @@ public class Board extends JPanel {
             repaint();
         }
     }
-
-    private boolean checkPlayerCollision(Actor actor, int type){
-        if(type == LEFT_COLLISION) {
-
-            for (int i = 0; i < Cop.size(); i++) {
-                Cop cops = (Cop) Cop.get(i);
-                for (int j = 0; j < Thief.size(); i++) {
-                    Thief thiefs = (Thief) Thief.get(i);
-                    if (thiefs.isLeftCollision(cops)) {
-                        System.err.println("LEFT COLLISION");
-                        return true;
-                    }
+    public static void movePlayer(int PID, String direction){
+        if(direction.equalsIgnoreCase("W")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if(checkWallCollision(thieves, TOP_COLLISION)){
+                return;
+            }
+            if(checkBagCollision(TOP_COLLISION)){
+                return;
+            }
+            if(checkPlayerCollision(TOP_COLLISION)){
+                return;
+            }
+            thieves.move(0, -SPACE, "u");
+        }
+    }
+    private static boolean checkPlayerCollision(int type){
+        if(type == LEFT_COLLISION){
+            for(int i = 0; i < cops.size(); i++){
+                Cop cop = (Cop)  cops.get(i);
+                if(soko.isLeftCollision(cop)){
+                    System.err.println("Collided with cop");
+                    return true;
                 }
             }
             return false;
         }
         return false;
     }
-    private boolean checkWallCollision(Actor actor, int type) {
+    private static boolean checkWallCollision(Actor actor, int type) {
 
         if (type == LEFT_COLLISION) {
 
@@ -281,7 +293,7 @@ public class Board extends JPanel {
         return false;
     }
 
-    private boolean checkBagCollision(int type) {
+    private static boolean checkBagCollision(int type) {
 
         if (type == LEFT_COLLISION) {
 
@@ -302,7 +314,6 @@ public class Board extends JPanel {
                         }
                     }
                     bag.move(-SPACE, 0);
-                    isCompleted();
                 }
             }
             return false;
@@ -326,7 +337,6 @@ public class Board extends JPanel {
                         }
                     }
                     bag.move(SPACE, 0);
-                    isCompleted();                   
                 }
             }
             return false;
@@ -350,7 +360,6 @@ public class Board extends JPanel {
                         }
                     }
                     bag.move(0, -SPACE);
-                    isCompleted();
                 }
             }
 
@@ -375,36 +384,12 @@ public class Board extends JPanel {
                         }
                     }
                     bag.move(0, SPACE);
-                    isCompleted();
                 }
             }
         }
 
         return false;
     }
-
-    public void isCompleted() {
-
-        int num = baggs.size();
-        int compl = 0;
-
-        for (int i = 0; i < num; i++) {
-            Baggage bag = (Baggage) baggs.get(i);
-            for (int j = 0; j < num; j++) {
-                Area area = (Area) areas.get(j);
-                if (bag.x() == area.x()
-                        && bag.y() == area.y()) {
-                    compl += 1;
-                }
-            }
-        }
-
-        if (compl == num) {
-            completed = true;
-            repaint();
-        }
-    }
-
     public void restartLevel() {
 
         areas.clear();

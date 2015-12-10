@@ -14,6 +14,7 @@ public class ClientThread implements Runnable{
     PrintWriter pw;
     Socket s;
     String squad,name,cmd;
+    int PID;
 
     public ClientThread(Socket conn){
         s = conn;
@@ -49,7 +50,18 @@ public class ClientThread implements Runnable{
                 name = br.readLine();
             }while(name.length() == 0 || name != null || name.length() < 2);
 
-
+            PID = Board.PlayerID;
+            Board.PlayerID++;
+            while(true){
+                System.err.println("Waiting client move");
+                cmd = br.readLine();
+                if(cmd == null){
+                    Board.PlayerID--;
+                    break;
+                }
+                Board.movePlayer(PID, cmd);
+                System.err.println("Client entered: " + cmd);
+            }
         }catch(IOException e){
             System.err.println(e);
         }
