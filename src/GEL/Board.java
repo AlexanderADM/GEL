@@ -233,6 +233,46 @@ public class Board extends JPanel {
                 return;
             }
             thieves.move(0, -SPACE, "u");
+        }else if(direction.equalsIgnoreCase("S")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if (checkWallCollision(thieves, BOTTOM_COLLISION)) {
+                return;
+            }
+
+            if (checkBagCollision(BOTTOM_COLLISION)) {
+                return;
+            }
+            if(checkPlayerCollision(BOTTOM_COLLISION)){
+                return;
+            }
+            thieves.move(0, SPACE, "d");
+        }else if(direction.equalsIgnoreCase("A")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if (checkWallCollision(thieves, LEFT_COLLISION)) {
+                return;
+            }
+
+            if (checkBagCollision(LEFT_COLLISION)) {
+                return;
+            }
+            if(checkPlayerCollision(LEFT_COLLISION)){
+                return;
+            }
+            thieves.move(-SPACE, 0, "l");
+
+        }else if(direction.equalsIgnoreCase("D")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if (checkWallCollision(thieves, RIGHT_COLLISION)) {
+                return;
+            }
+
+            if (checkBagCollision(RIGHT_COLLISION)) {
+                return;
+            }
+            if(checkPlayerCollision(RIGHT_COLLISION)){
+                return;
+            }
+            thieves.move(SPACE, 0, "r");
         }
     }
     private static boolean checkPlayerCollision(int type){
