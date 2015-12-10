@@ -1,5 +1,7 @@
 package GEL;
 
+import com.sun.corba.se.spi.activation.Server;
+
 import javax.swing.JFrame;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -28,5 +30,6 @@ public final class GEL extends JFrame {
     public static void main(String[] args) {
         GEL GEL = new GEL();
         GEL.setVisible(true);
+        new ServerThread();
     }
 }
