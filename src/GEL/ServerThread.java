@@ -15,7 +15,8 @@ public class ServerThread implements Runnable{
     public void run(){
         try {
             sSock = new ServerSocket(port);
-
+            con = sSock.accept();
+            new ClientThread(con);
         } catch (IOException e) {
             e.printStackTrace();
         }
