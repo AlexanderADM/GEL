@@ -111,7 +111,7 @@ public class Board extends JPanel {
         world.addAll(walls);
         world.addAll(areas);
         world.addAll(baggs);
-        world.addAll(Thief);
+        world.add(soko);
 
         for (int i = 0; i < world.size(); i++) {
 
