@@ -1,6 +1,8 @@
 package GEL;
 
 import javax.swing.JFrame;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 
 public final class GEL extends JFrame {
