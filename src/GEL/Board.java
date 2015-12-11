@@ -5,9 +5,11 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
-public class Board extends JPanel { 
+public class Board extends JPanel implements Runnable{ 
 
     private final int OFFSET = 30;
     private static final int SPACE = 20;
@@ -55,7 +57,12 @@ public class Board extends JPanel {
     public int getBoardWidth() {
         return this.w;
     }
-
+    public void checkMovement(){
+        for(int i = 0; i < thiefs.size(); i++){
+            Thief th = (Thief) thiefs.get(i);
+            
+        }
+    }
     public int getBoardHeight() {
         return this.h;
     }
@@ -233,46 +240,6 @@ public class Board extends JPanel {
                 return;
             }
             thieves.move(0, -SPACE, "u");
-        }else if(direction.equalsIgnoreCase("S")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if (checkWallCollision(thieves, BOTTOM_COLLISION)) {
-                return;
-            }
-
-            if (checkBagCollision(BOTTOM_COLLISION)) {
-                return;
-            }
-            if(checkPlayerCollision(BOTTOM_COLLISION)){
-                return;
-            }
-            thieves.move(0, SPACE, "d");
-        }else if(direction.equalsIgnoreCase("A")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if (checkWallCollision(thieves, LEFT_COLLISION)) {
-                return;
-            }
-
-            if (checkBagCollision(LEFT_COLLISION)) {
-                return;
-            }
-            if(checkPlayerCollision(LEFT_COLLISION)){
-                return;
-            }
-            thieves.move(-SPACE, 0, "l");
-
-        }else if(direction.equalsIgnoreCase("D")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if (checkWallCollision(thieves, RIGHT_COLLISION)) {
-                return;
-            }
-
-            if (checkBagCollision(RIGHT_COLLISION)) {
-                return;
-            }
-            if(checkPlayerCollision(RIGHT_COLLISION)){
-                return;
-            }
-            thieves.move(SPACE, 0, "r");
         }
     }
     private static boolean checkPlayerCollision(int type){
@@ -429,6 +396,21 @@ public class Board extends JPanel {
         }
 
         return false;
+    }
+    public void run(){
+        synchronized(cops){
+            checkMovement();
+            repaint();
+        }
+        synchronized(thiefs){
+            checkMovement();
+            repaint();
+        }
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     public void restartLevel() {
 

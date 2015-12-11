@@ -15,6 +15,7 @@ public class ClientThread implements Runnable{
     Socket s;
     String squad,name,cmd;
     int PID;
+    public static final int MAXPLAYER = 9;
 
     public ClientThread(Socket conn){
         s = conn;
@@ -31,11 +32,11 @@ public class ClientThread implements Runnable{
 
             while(true){
                 squad = br.readLine();
-                if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() < 10){
+                if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() < MAXPLAYER){
                     pw.println("ok");
                     pw.flush();
                     break;
-                }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() < 10){
+                }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() < MAXPLAYER){
                     pw.println("ok");
                     pw.flush();
                     break;
