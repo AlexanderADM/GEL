@@ -5,9 +5,9 @@
         <group>
             <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/Client.java</file>
             <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/ClientThread.java</file>
-            <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/GEL.java</file>
-            <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/ServerThread.java</file>
             <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/Board.java</file>
+            <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/ServerThread.java</file>
+            <file>file:/C:/Users/ReNext/projects/GEL/src/GEL/GEL.java</file>
         </group>
     </open-files>
 </project-private>

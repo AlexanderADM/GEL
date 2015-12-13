@@ -6,16 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- * Created by Adrian on 10.12.2015.
- */
 public class ClientThread implements Runnable{
     BufferedReader br;
     PrintWriter pw;
     Socket s;
     String squad,name,cmd;
     int PID;
-    public static final int MAXPLAYER = 9;
 
     public ClientThread(Socket conn){
         s = conn;
@@ -32,14 +28,28 @@ public class ClientThread implements Runnable{
 
             while(true){
                 squad = br.readLine();
-                if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() < MAXPLAYER){
-                    pw.println("ok");
-                    pw.flush();
-                    break;
-                }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() < MAXPLAYER){
-                    pw.println("ok");
-                    pw.flush();
-                    break;
+                if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() == true){
+                    PID = Board.getEmptyID(squad);
+                    if(PID == 9){
+                        pw.println("error");
+                        pw.flush();
+                    }
+                    else{
+                        pw.println("ok");
+                        pw.flush();
+                        break;
+                    }
+                }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() == true){
+                    PID = Board.getEmptyID(squad);
+                    if(PID == 9){
+                        pw.println("error");
+                        pw.flush();
+                    }
+                    else{
+                        pw.println("ok");
+                        pw.flush();
+                        break;
+                    }
                 }
                 pw.println("error");
                 pw.flush();

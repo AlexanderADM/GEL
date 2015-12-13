@@ -23,6 +23,9 @@ public class Board extends JPanel implements Runnable{
     private static ArrayList areas = new ArrayList();
     private static ArrayList thiefs = new ArrayList();
     private static ArrayList cops = new ArrayList();
+    public static final int MAXPLAYER = 9;
+    private static ArrayList id_thiefs = new ArrayList(MAXPLAYER);
+    private static ArrayList id_cops = new ArrayList(MAXPLAYER);
     protected static int PlayerID = 0;
     private static Thief soko;
     private int w = 0;
@@ -48,10 +51,13 @@ public class Board extends JPanel implements Runnable{
             + "##################################\n";
 
     public Board() {
-
         addKeyListener(new TAdapter());
         setFocusable(true);
         initWorld();
+        for(int i = 0; i < MAXPLAYER; i++){
+            id_thiefs.add(i, true);
+            id_cops.add(i, true);
+        }
     }
 
     public int getBoardWidth() {
@@ -66,11 +72,11 @@ public class Board extends JPanel implements Runnable{
     public int getBoardHeight() {
         return this.h;
     }
-    public static int getThiefCount(){
-        return thiefs.size();
+    public static boolean getThiefCount(){
+        return id_thiefs.contains(true);
     }
-    public static int getCopCount(){
-        return cops.size();
+    public static boolean getCopCount(){
+        return id_cops.contains(true);
     }
     public final void initWorld() {
         
@@ -421,5 +427,30 @@ public class Board extends JPanel implements Runnable{
         if (completed) {
             completed = false;
         }
+    }
+    
+    public static int getEmptyID(String team){
+        //synchronized(this){
+            int ID = 0;
+            if(team.equalsIgnoreCase("ladri")){
+                while(ID < MAXPLAYER + 1){
+                    if(id_thiefs.get(ID).equals(true)){
+                        id_thiefs.set(ID, false);
+                        break;
+                    }
+                    ID++;
+                }
+            }
+            else if(team.equalsIgnoreCase("guardie")){
+                while(ID < 10){
+                    if(id_cops.get(ID).equals(true)){
+                        id_thiefs.set(ID, false);
+                        break;
+                    }
+                    ID++;
+                }
+            }
+            return ID; //Se torna "9" allora non ci sono posti disponibili
+        //}
     }
 }
