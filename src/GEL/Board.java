@@ -72,10 +72,10 @@ public class Board extends JPanel implements Runnable{
     public int getBoardHeight() {
         return this.h;
     }
-    public static boolean getThiefCount(){
+    synchronized static boolean getThiefCount(){
         return id_thiefs.contains(true);
     }
-    public static boolean getCopCount(){
+    synchronized static boolean getCopCount(){
         return id_cops.contains(true);
     }
     public final void initWorld() {
