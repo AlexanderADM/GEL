@@ -198,7 +198,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkBagCollision(LEFT_COLLISION)) {
                     return;
                 }
-
+                randomSpawn(7,"ladri");
                 soko.move(-SPACE, 0, "l");
 
             } else if (key == KeyEvent.VK_RIGHT) {
@@ -462,16 +462,44 @@ public class Board extends JPanel implements Runnable{
         }
         return ID; //Se torna "9" allora non ci sono posti disponibili
     }
+/*    public static boolean checkThiefSpawn(int x, int y){
+        Thief check;
+        for(int i = 0; i < thiefs.size(); i++){
+            check = (Thief) thiefs.get(i);
+            if(check.x() != x){
+                System.err.println("OK X: " + x);
+                if(check.y() != y){
+                   System.err.println("OK Y: " + y);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }*/
     synchronized static void randomSpawn(int PID, String team){
         if(team.equalsIgnoreCase("ladri")){
-            while(true) {
+            //while(true) {
                 int randomspawn = ran.nextInt(areac.size());
-                areac.set(randomspawn, '@');
-            }
+                AreaC c = ( AreaC ) areac.get(randomspawn);
+                System.err.println("Thief ArrayList size: " + thiefs.size());
+                //if (checkThiefSpawn(c.x(),c.y())) {
+                    Thief a = new Thief(c.x(), c.y());
+                    System.err.println("Created new Thief");
+                    System.err.println("X: " + c.x() + " Y: " + c.y());
+                    thiefs.add(a);
+                    //break;
+                //}
+            //}
+
         }else if(team.equalsIgnoreCase("guardie")){
             while(true){
                 int randomspawn = ran.nextInt(areas.size());
-                areac.set(randomspawn, '$');
+                Area a = (Area) areas.get(randomspawn);
+                System.err.println("Cop arraylist size: " + cops.size());
+                Cop b = new Cop(a.x(),a.y());
+                System.err.println("Created new Cop");
+                System.err.println("X: " + a.x() + " Y: " + a.y());
+                cops.add(b);
             }
         }
     }
