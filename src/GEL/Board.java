@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -17,10 +18,11 @@ public class Board extends JPanel implements Runnable{
     private static final int RIGHT_COLLISION = 2;
     private static final int TOP_COLLISION = 3;
     private static final int BOTTOM_COLLISION = 4;
-
+    private static Random ran = new Random();
     private static ArrayList walls = new ArrayList();
     private static ArrayList baggs = new ArrayList();
     private static ArrayList areas = new ArrayList();
+    private static ArrayList areac = new ArrayList();
     private static ArrayList thiefs = new ArrayList();
     private static ArrayList cops = new ArrayList();
     public static final int MAXPLAYER = 9;
@@ -31,22 +33,22 @@ public class Board extends JPanel implements Runnable{
     private int h = 0;
     private static boolean completed = false;
     
-    private String level =
+    private static String level =
               "##################################\n"
-            + "#@    #############    #######   #\n"
-            + "#     #############              #\n"
-            + "#        ###                     #\n"
-            + "#                    $           #\n"
-            + "#     ####$####  #### ####  ######\n"
-            + "#     #  %    #  #  @    #  #  ..#\n"
-            + "#     #  %    $  #########  #  ..#\n"
-            + "#     #  %    #          #  #  ..#\n"
-            + "#     $      @#  ######  #  #    #\n"
-            + "#     ####$####  ######  #  #    #\n"
-            + "#                           #  ###\n"
-            + "#               ###  ##          #\n"
-            + "#     #######   ###  ###         #\n"
-            + "#     #######@       #########   #\n"
+            + "#£££££#############    #######   #\n"
+            + "#£££££#############              #\n"
+            + "#£££££   ###                     #\n"
+            + "#£££££                $          #\n"
+            + "#£££££####$####  #### ####  ######\n"
+            + "#£££££#  %    #  #  @    #  #  ..#\n"
+            + "#£££££#  %    $  #########  #  ..#\n"
+            + "#£££££#  %    #          #  #  ..#\n"
+            + "#£££££$       #  ######  #  #    #\n"
+            + "#£££££####$####  ######  #  #    #\n"
+            + "#£££££                      #  ###\n"
+            + "#£££££          ###  ##          #\n"
+            + "#£££££#######   ###  ###         #\n"
+            + "#£££££#######       #########    #\n"
             + "##################################\n";
 
     public Board() {
@@ -65,7 +67,7 @@ public class Board extends JPanel implements Runnable{
     public void checkMovement(){
         for(int i = 0; i < thiefs.size(); i++){
             Thief th = (Thief) thiefs.get(i);
-            
+            //TODO Movement
         }
     }
     public int getBoardHeight() {
@@ -85,7 +87,9 @@ public class Board extends JPanel implements Runnable{
         Wall wall;
         Baggage b;
         Area a;
+        AreaC e;
         Cop c;
+        Thief d;
 
 
         for (int i = 0; i < level.length(); i++) {
@@ -111,8 +115,14 @@ public class Board extends JPanel implements Runnable{
                 a = new Area(x, y);
                 areas.add(a);
                 x += SPACE;
+            } else if(item == '£'){
+                e = new AreaC(x, y);
+                areac.add(e);
+                x += SPACE;
             } else if (item == '@') {
                 soko = new Thief(x, y);
+                d = new Thief(x, y);
+                thiefs.add(d);
                 x += SPACE;
             }else if  (item == '%'){
                 c = new Cop(x, y);
@@ -132,11 +142,12 @@ public class Board extends JPanel implements Runnable{
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         ArrayList world = new ArrayList();
-        world.add(soko);
         world.addAll(areas);
+        world.addAll(areac);
         world.addAll(baggs);
         world.addAll(cops);
         world.addAll(thiefs);
+        world.add(soko);
         world.addAll(walls);
 
         for (int i = 0; i < world.size(); i++) {
@@ -450,5 +461,25 @@ public class Board extends JPanel implements Runnable{
             }
         }
         return ID; //Se torna "9" allora non ci sono posti disponibili
+    }
+    synchronized static void randomSpawn(int PID, String team){
+        if(team.equalsIgnoreCase("ladri")){
+            while(true) {
+                int randomspawn = ran.nextInt(areac.size());
+                areac.set(randomspawn, '@');
+            }
+        }else if(team.equalsIgnoreCase("guardie")){
+            while(true){
+                int randomspawn = ran.nextInt(areas.size());
+                areac.set(randomspawn, '$');
+            }
+        }
+    }
+    synchronized static void releaseID(int PID, String team){
+        if (team.equalsIgnoreCase("ladri")) {
+            id_thiefs.set(PID, true);
+        }else if (team.equalsIgnoreCase("guardie")) {
+            id_cops.set(PID, true);
+        }
     }
 }

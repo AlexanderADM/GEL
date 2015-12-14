@@ -69,15 +69,17 @@ public class ClientThread implements Runnable{
             while(true){
                 System.err.println("Waiting client move");
                 cmd = br.readLine();
-                if(cmd == null){
+                if(cmd == null || cmd.equalsIgnoreCase("exit")){
+                    Board.releaseID(PID,squad);
                     //TODO Disconnect Method
-                    break;
+                    pw.close();
+                    br.close();
+                    s.close();
+                    Thread.currentThread().interrupt();
                 }
                 Board.movePlayer(PID, cmd);
                 System.err.println("Client entered: " + cmd);
             }
-
-
         }catch(IOException e){
             System.err.println(e);
         }
