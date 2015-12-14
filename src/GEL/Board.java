@@ -428,29 +428,27 @@ public class Board extends JPanel implements Runnable{
             completed = false;
         }
     }
-    
-    public static int getEmptyID(String team){
-        //synchronized(this){
-            int ID = 0;
-            if(team.equalsIgnoreCase("ladri")){
-                while(ID < MAXPLAYER + 1){
-                    if(id_thiefs.get(ID).equals(true)){
-                        id_thiefs.set(ID, false);
-                        break;
-                    }
-                    ID++;
+
+
+    synchronized static int getEmptyID(String team){
+        int ID = 0;
+        if (team.equalsIgnoreCase("ladri")) {
+            while (ID < MAXPLAYER + 1) {
+                if (id_thiefs.get(ID).equals(true)) {
+                    id_thiefs.set(ID, false);
+                    break;
                 }
+                ID++;
             }
-            else if(team.equalsIgnoreCase("guardie")){
-                while(ID < 10){
-                    if(id_cops.get(ID).equals(true)){
-                        id_thiefs.set(ID, false);
-                        break;
-                    }
-                    ID++;
+        } else if (team.equalsIgnoreCase("guardie")) {
+            while (ID < MAXPLAYER + 1) {
+                if (id_cops.get(ID).equals(true)) {
+                    id_thiefs.set(ID, false);
+                    break;
                 }
+                ID++;
             }
-            return ID; //Se torna "9" allora non ci sono posti disponibili
-        //}
+        }
+        return ID; //Se torna "9" allora non ci sono posti disponibili
     }
 }
