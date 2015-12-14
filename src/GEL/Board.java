@@ -26,7 +26,6 @@ public class Board extends JPanel implements Runnable{
     public static final int MAXPLAYER = 9;
     private static ArrayList id_thiefs = new ArrayList(MAXPLAYER);
     private static ArrayList id_cops = new ArrayList(MAXPLAYER);
-    protected static int PlayerID = 0;
     private static Thief soko;
     private int w = 0;
     private int h = 0;
@@ -37,17 +36,17 @@ public class Board extends JPanel implements Runnable{
             + "#@    #############    #######   #\n"
             + "#     #############              #\n"
             + "#        ###                     #\n"
-            + "#                                #\n"
-            + "#     ###   ###  #########  ######\n"
-            + "#     #  %    #  #########  #  ..#\n"
-            + "#     #  %    #  #########  #  ..#\n"
+            + "#                    $           #\n"
+            + "#     ####$####  #### ####  ######\n"
+            + "#     #  %    #  #  @    #  #  ..#\n"
+            + "#     #  %    $  #########  #  ..#\n"
             + "#     #  %    #          #  #  ..#\n"
-            + "#     #       #  ######  #  #    #\n"
-            + "#     ###   ###  ######  #  #    #\n"
+            + "#     $      @#  ######  #  #    #\n"
+            + "#     ####$####  ######  #  #    #\n"
             + "#                           #  ###\n"
             + "#               ###  ##          #\n"
             + "#     #######   ###  ###         #\n"
-            + "#     #######        #########   #\n"
+            + "#     #######@       #########   #\n"
             + "##################################\n";
 
     public Board() {
@@ -133,11 +132,12 @@ public class Board extends JPanel implements Runnable{
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         ArrayList world = new ArrayList();
-        world.addAll(walls);
+        world.add(soko);
         world.addAll(areas);
         world.addAll(baggs);
         world.addAll(cops);
-        world.add(soko);
+        world.addAll(thiefs);
+        world.addAll(walls);
 
         for (int i = 0; i < world.size(); i++) {
 

@@ -103,43 +103,41 @@ public class Client extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayActionPerformed
-        //try{
-            if(name.getText().length() > 1){
-                if(Play.getText().equals("Esci")){
-                    //con.close();
+        try {
+            if (name.getText().length() > 1) {
+                if (Play.getText().equals("Esci")) {
+                    con.close();
                     Play.setText("Gioca");
                     Guardia.setEnabled(true);
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
-                }
-                else{
-                    System.out.println("OK2");
-                    /*con = new Socket("127.0.0.1", 8080);
-                    
+                } else {
+                    con = new Socket("127.0.0.1", 8080);
+
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
-                    if(Guardia.isSelected()){
+                    if (Guardia.isSelected()) {
                         pw.println("guardie");
-                    }
-                    else if(Ladro.isSelected()){
+                    } else if (Ladro.isSelected()) {
                         pw.println("ladri");
                     }
                     pw.flush();
-                    
+
                     pw.println(name.getText());
-                    pw.flush();*/
+                    pw.flush();
                     Play.setText("Esci");
                     Guardia.setEnabled(false);
                     Ladro.setEnabled(false);
                     name.setEnabled(false);
+                    //TODO Movement for computer client
                     addKeyListener(new T2Adapter());
                     setFocusable(true);
                 }
             }
-        /*}
+        }
         catch(IOException e){
             System.out.println("" + e + "\n");
-        }*/
+        }
     }//GEN-LAST:event_PlayActionPerformed
 
     private void GuardiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardiaActionPerformed
@@ -187,15 +185,11 @@ public class Client extends javax.swing.JFrame {
 
         
         public T2Adapter(){
-            System.out.println("uijfif");
-            
+            //TODO Finish this
         }
         
         @Override
         public void keyPressed(KeyEvent e) {
-            /*if (true) {
-                return;
-            }*/
             System.out.println("OK");
             int key = e.getKeyCode();
             
