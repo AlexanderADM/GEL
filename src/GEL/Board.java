@@ -23,11 +23,11 @@ public class Board extends JPanel implements Runnable{
     private static ArrayList baggs = new ArrayList();
     private static ArrayList areas = new ArrayList();
     private static ArrayList areac = new ArrayList();
-    private static ArrayList thiefs = new ArrayList();
-    private static ArrayList cops = new ArrayList();
+    protected static ArrayList thiefs = new ArrayList();
+    protected static ArrayList cops = new ArrayList();
     public static final int MAXPLAYER = 9;
-    private static ArrayList id_thiefs = new ArrayList(MAXPLAYER);
-    private static ArrayList id_cops = new ArrayList(MAXPLAYER);
+    private static ArrayList id_thiefs = new ArrayList();
+    private static ArrayList id_cops = new ArrayList();
     private static Thief soko;
     private int w = 0;
     private int h = 0;
@@ -55,6 +55,7 @@ public class Board extends JPanel implements Runnable{
         addKeyListener(new TAdapter());
         setFocusable(true);
         initWorld();
+        new Thread(this).start();
         for(int i = 0; i < MAXPLAYER; i++){
             id_thiefs.add(i, true);
             id_cops.add(i, true);
@@ -63,12 +64,6 @@ public class Board extends JPanel implements Runnable{
 
     public int getBoardWidth() {
         return this.w;
-    }
-    public void checkMovement(){
-        for(int i = 0; i < thiefs.size(); i++){
-            Thief th = (Thief) thiefs.get(i);
-            //TODO Movement
-        }
     }
     public int getBoardHeight() {
         return this.h;
@@ -198,7 +193,6 @@ public class Board extends JPanel implements Runnable{
                 if (checkBagCollision(LEFT_COLLISION)) {
                     return;
                 }
-                randomSpawn(7,"ladri");
                 soko.move(-SPACE, 0, "l");
 
             } else if (key == KeyEvent.VK_RIGHT) {
@@ -244,7 +238,7 @@ public class Board extends JPanel implements Runnable{
             repaint();
         }
     }
-    public static void movePlayer(int PID, String direction){
+    synchronized static void movePlayer(int PID, String direction){
         if(direction.equalsIgnoreCase("W")){
             Thief thieves = (Thief) thiefs.get(PID);
             if(checkWallCollision(thieves, TOP_COLLISION)){
@@ -257,6 +251,42 @@ public class Board extends JPanel implements Runnable{
                 return;
             }
             thieves.move(0, -SPACE, "u");
+        }else if(direction.equalsIgnoreCase("S")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if(checkWallCollision(thieves, BOTTOM_COLLISION)){
+                return;
+            }
+            if(checkBagCollision(BOTTOM_COLLISION)){
+                return;
+            }
+            if(checkPlayerCollision(BOTTOM_COLLISION)){
+                return;
+            }
+            thieves.move(0, SPACE, "d");
+        }else if(direction.equalsIgnoreCase("A")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if(checkWallCollision(thieves, LEFT_COLLISION)){
+                return;
+            }
+            if(checkBagCollision(LEFT_COLLISION)){
+                return;
+            }
+            if(checkPlayerCollision(LEFT_COLLISION)){
+                return;
+            }
+            thieves.move(-SPACE, 0, "l");
+        }else if(direction.equalsIgnoreCase("S")){
+            Thief thieves = (Thief) thiefs.get(PID);
+            if(checkWallCollision(thieves, RIGHT_COLLISION)){
+                return;
+            }
+            if(checkBagCollision(RIGHT_COLLISION)){
+                return;
+            }
+            if(checkPlayerCollision(RIGHT_COLLISION)){
+                return;
+            }
+            thieves.move(SPACE, 0, "r");
         }
     }
     private static boolean checkPlayerCollision(int type){
@@ -415,18 +445,18 @@ public class Board extends JPanel implements Runnable{
         return false;
     }
     public void run(){
-        synchronized(cops){
-            checkMovement();
-            repaint();
-        }
-        synchronized(thiefs){
-            checkMovement();
-            repaint();
-        }
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        while(true) {
+            synchronized (cops) {
+                repaint();
+            }
+            synchronized (thiefs) {
+                repaint();
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     public void restartLevel() {
@@ -434,6 +464,9 @@ public class Board extends JPanel implements Runnable{
         areas.clear();
         baggs.clear();
         walls.clear();
+        thiefs.clear();
+        cops.clear();
+        areac.clear();
         initWorld();
         if (completed) {
             completed = false;
@@ -446,6 +479,7 @@ public class Board extends JPanel implements Runnable{
         if (team.equalsIgnoreCase("ladri")) {
             while (ID < MAXPLAYER + 1) {
                 if (id_thiefs.get(ID).equals(true)) {
+                    System.err.println("Position found at: " + ID + " Player ID set to " + ID);
                     id_thiefs.set(ID, false);
                     break;
                 }
@@ -454,6 +488,7 @@ public class Board extends JPanel implements Runnable{
         } else if (team.equalsIgnoreCase("guardie")) {
             while (ID < MAXPLAYER + 1) {
                 if (id_cops.get(ID).equals(true)) {
+                    System.err.println("Position found at: " + ID + " Player ID set to " + ID);
                     id_thiefs.set(ID, false);
                     break;
                 }
@@ -486,11 +521,18 @@ public class Board extends JPanel implements Runnable{
                     Thief a = new Thief(c.x(), c.y());
                     System.err.println("Created new Thief");
                     System.err.println("X: " + c.x() + " Y: " + c.y());
-                    thiefs.add(a);
+                    try{
+                        thiefs.get(PID);
+                        thiefs.set(PID, a);
+                    }catch(IndexOutOfBoundsException e){
+                        thiefs.add(PID, a);
+                    }
+
+
                     //break;
                 //}
             //}
-
+                //TODO Sometimes users spawn in the same position fix the position check
         }else if(team.equalsIgnoreCase("guardie")){
             while(true){
                 int randomspawn = ran.nextInt(areas.size());
@@ -499,15 +541,31 @@ public class Board extends JPanel implements Runnable{
                 Cop b = new Cop(a.x(),a.y());
                 System.err.println("Created new Cop");
                 System.err.println("X: " + a.x() + " Y: " + a.y());
-                cops.add(b);
+                try{
+                    cops.get(PID);
+                    cops.set(PID, b);
+                }catch(IndexOutOfBoundsException e){
+                    cops.add(PID, b);
+                }
+
             }
         }
     }
     synchronized static void releaseID(int PID, String team){
         if (team.equalsIgnoreCase("ladri")) {
-            id_thiefs.set(PID, true);
+            try{
+                id_thiefs.set(PID, true);
+                thiefs.remove(PID);
+            }catch(IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }else if (team.equalsIgnoreCase("guardie")) {
-            id_cops.set(PID, true);
+            try{
+                id_cops.set(PID, true);
+                cops.remove(PID);
+            }catch(IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }
     }
 }

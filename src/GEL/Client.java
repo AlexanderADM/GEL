@@ -106,13 +106,15 @@ public class Client extends javax.swing.JFrame {
         try {
             if (name.getText().length() > 1) {
                 if (Play.getText().equals("Esci")) {
+                    pw.println("exit");
+                    pw.flush();
                     con.close();
                     Play.setText("Gioca");
                     Guardia.setEnabled(true);
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
                 } else {
-                    con = new Socket("127.0.0.1", 8080);
+                    con = new Socket("127.0.0.1", 12345);
 
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
@@ -122,16 +124,26 @@ public class Client extends javax.swing.JFrame {
                         pw.println("ladri");
                     }
                     pw.flush();
-
-                    pw.println(name.getText());
-                    pw.flush();
-                    Play.setText("Esci");
-                    Guardia.setEnabled(false);
-                    Ladro.setEnabled(false);
-                    name.setEnabled(false);
-                    //TODO Movement for computer client
-                    addKeyListener(new T2Adapter());
-                    setFocusable(true);
+                    String mess = br.readLine();
+                    if(mess.equalsIgnoreCase("ok")) {
+                        System.err.println("Test");
+                        pw.println(name.getText());
+                        pw.flush();
+                        Play.setText("Esci");
+                        Guardia.setEnabled(false);
+                        Ladro.setEnabled(false);
+                        name.setEnabled(false);
+                        //TODO Movement for computer client
+                        addKeyListener(new T2Adapter());
+                        setFocusable(true);
+                    }
+                    else if(mess.equalsIgnoreCase("error")){
+                        System.err.println("Error");
+                        con.close();
+                        pw.close();
+                        br.close();
+                        Play.setText("Gioca");
+                    }
                 }
             }
         }
