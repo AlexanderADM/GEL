@@ -93,6 +93,7 @@ public class ClientThread implements Runnable{
                     s.close();
                     //TODO Client forced connection / closed
                     Thread.currentThread().interrupt();
+                    Thread.sleep(2000);
                 }
                 Board.movePlayer(PID, cmd);
                 System.err.println("Client entered: " + cmd);

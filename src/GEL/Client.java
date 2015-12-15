@@ -9,6 +9,9 @@ public class Client extends javax.swing.JFrame {
     Socket con;
     BufferedReader br;
     PrintWriter pw;
+
+    CheckServer r = new CheckServer();
+    Thread check;
     
     
     public Client() {
@@ -106,6 +109,7 @@ public class Client extends javax.swing.JFrame {
         try {
             if (name.getText().length() > 1) {
                 if (Play.getText().equals("Esci")) {
+                    check.interrupt();
                     pw.println("exit");
                     pw.flush();
                     con.close();
@@ -113,9 +117,11 @@ public class Client extends javax.swing.JFrame {
                     Guardia.setEnabled(true);
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
+
                 } else {
                     con = new Socket("127.0.0.1", 12345);
-
+                    check = new Thread(r);
+                    check.start();
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
                     if (Guardia.isSelected()) {
@@ -136,6 +142,7 @@ public class Client extends javax.swing.JFrame {
                         //TODO Movement for computer client
                         addKeyListener(new T2Adapter());
                         setFocusable(true);
+
                     }
                     else if(mess.equalsIgnoreCase("error")){
                         System.err.println("Error");
@@ -192,8 +199,21 @@ public class Client extends javax.swing.JFrame {
         });
     }
 
-    
-    class T2Adapter extends KeyAdapter {
+    public class CheckServer implements Runnable{
+        public void run(){
+            try{
+                while(true){
+                    Thread.sleep(200);
+                    System.out.println("banana");
+                }
+            }
+            catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class T2Adapter extends KeyAdapter {
 
         
         public T2Adapter(){

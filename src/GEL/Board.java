@@ -300,6 +300,9 @@ public class Board extends JPanel implements Runnable{
             }
             return false;
         }
+        //TODO Finish collisions
+        //TODO Add safe zone for thieves
+        //TODO Add capture for cops - remove player from board keep connection
         return false;
     }
     private static boolean checkWallCollision(Actor actor, int type) {
