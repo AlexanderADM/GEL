@@ -95,7 +95,7 @@ public class ClientThread implements Runnable{
                     Thread.currentThread().interrupt();
                     Thread.sleep(2000);
                 }
-                Board.movePlayer(PID, cmd);
+                Board.movePlayer(PID, squad, cmd);
                 System.err.println("Client entered: " + cmd);
             }
         }catch(IOException e){

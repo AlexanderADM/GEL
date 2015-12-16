@@ -228,9 +228,6 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(soko, LEFT_COLLISION)) {
                     return;
                 }
-                if(checkPlayerCollision(LEFT_COLLISION)){
-                    return;
-                }
                 if (checkBagCollision(LEFT_COLLISION)) {
                     return;
                 }
@@ -279,70 +276,194 @@ public class Board extends JPanel implements Runnable{
             repaint();
         }
     }
-    synchronized static void movePlayer(int PID, String direction){
-        if(direction.equalsIgnoreCase("W")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if(checkWallCollision(thieves, TOP_COLLISION)){
-                return;
+    synchronized static void movePlayer(int PID,String team, String direction){
+        if(team.equalsIgnoreCase("ladri")) {
+            if (direction.equalsIgnoreCase("W")) {
+                Thief thieves = (Thief) thiefs.get(PID);
+                if (checkWallCollision(thieves, TOP_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(TOP_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
+                    return;
+                }
+                thieves.move(0, -SPACE, "u");
+            } else if (direction.equalsIgnoreCase("S")) {
+                Thief thieves = (Thief) thiefs.get(PID);
+                if (checkWallCollision(thieves, BOTTOM_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(BOTTOM_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
+                    return;
+                }
+                thieves.move(0, SPACE, "d");
+            } else if (direction.equalsIgnoreCase("A")) {
+                Thief thieves = (Thief) thiefs.get(PID);
+                if (checkWallCollision(thieves, LEFT_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(LEFT_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
+                    return;
+                }
+                thieves.move(-SPACE, 0, "l");
+            } else if (direction.equalsIgnoreCase("D")) {
+                Thief thieves = (Thief) thiefs.get(PID);
+                if (checkWallCollision(thieves, RIGHT_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(RIGHT_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
+                    return;
+                }
+                thieves.move(SPACE, 0, "r");
             }
-            if(checkBagCollision(TOP_COLLISION)){
-                return;
+        }else if(team.equalsIgnoreCase("guardie")){
+            if (direction.equalsIgnoreCase("W")) {
+                Cop cp = (Cop) cops.get(PID);
+                if (checkWallCollision(cp, TOP_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(TOP_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
+                    return;
+                }
+                cp.move(0, -SPACE, "u");
+            } else if (direction.equalsIgnoreCase("S")) {
+                Cop cp = (Cop) cops.get(PID);
+                if (checkWallCollision(cp, BOTTOM_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(BOTTOM_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
+                    return;
+                }
+                cp.move(0, SPACE, "d");
+            } else if (direction.equalsIgnoreCase("A")) {
+                Cop cp = (Cop) cops.get(PID);
+                if (checkWallCollision(cp, LEFT_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(LEFT_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
+                    return;
+                }
+                cp.move(-SPACE, 0, "l");
+            } else if (direction.equalsIgnoreCase("D")) {
+                Cop cp = (Cop) cops.get(PID);
+                if (checkWallCollision(cp, RIGHT_COLLISION)) {
+                    return;
+                }
+                if (checkBagCollision(RIGHT_COLLISION)) {
+                    return;
+                }
+                if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
+                    return;
+                }
+                cp.move(SPACE, 0, "r");
             }
-            if(checkPlayerCollision(TOP_COLLISION)){
-                return;
-            }
-            thieves.move(0, -SPACE, "u");
-        }else if(direction.equalsIgnoreCase("S")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if(checkWallCollision(thieves, BOTTOM_COLLISION)){
-                return;
-            }
-            if(checkBagCollision(BOTTOM_COLLISION)){
-                return;
-            }
-            if(checkPlayerCollision(BOTTOM_COLLISION)){
-                return;
-            }
-            thieves.move(0, SPACE, "d");
-        }else if(direction.equalsIgnoreCase("A")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if(checkWallCollision(thieves, LEFT_COLLISION)){
-                return;
-            }
-            if(checkBagCollision(LEFT_COLLISION)){
-                return;
-            }
-            if(checkPlayerCollision(LEFT_COLLISION)){
-                return;
-            }
-            thieves.move(-SPACE, 0, "l");
-        }else if(direction.equalsIgnoreCase("S")){
-            Thief thieves = (Thief) thiefs.get(PID);
-            if(checkWallCollision(thieves, RIGHT_COLLISION)){
-                return;
-            }
-            if(checkBagCollision(RIGHT_COLLISION)){
-                return;
-            }
-            if(checkPlayerCollision(RIGHT_COLLISION)){
-                return;
-            }
-            thieves.move(SPACE, 0, "r");
         }
     }
-    private static boolean checkPlayerCollision(int type){
-        if(type == LEFT_COLLISION){
-            for(int i = 0; i < cops.size(); i++){
-                Cop cop = (Cop)  cops.get(i);
-                if(soko.isLeftCollision(cop)){
-                    System.err.println("Collided with cop");
-                    return true;
+    private static boolean isSafe(int PID){
+        Thief th = (Thief) thiefs.get(PID);
+        Area zone;
+        for (int i = 0; i < areas.size(); i++) {
+            zone = (Area) areas.get(i);
+            if(zone.x() == th.x() && zone.y() == th.y()){
+                System.err.println("Thief ID: " + PID + " is in the safe zone.");
+                //TODO clear out the player
+            }
+        }
+        return false;
+    }
+    private static boolean checkPlayerCollision(int PID, String team, int type){
+        if(team.equalsIgnoreCase("ladri")) {
+            Thief th = (Thief) thiefs.get(PID);
+            if (type == LEFT_COLLISION) {
+                for (int i = 0; i < cops.size(); i++) {
+                    Cop cop = (Cop) cops.get(i);
+                    if (th.isLeftCollision(cop)) {
+                        System.err.println("Collided with cop");
+                        return true;
+                    }
+                }
+                return false;
+            } else if (type == RIGHT_COLLISION) {
+                for (int i = 0; i < cops.size(); i++) {
+                    Cop cop = (Cop) cops.get(i);
+                    if (th.isRightCollision(cop)) {
+                        System.err.println("Collided with cop");
+                        return true;
+                    }
+                }
+            } else if (type == TOP_COLLISION) {
+                for (int i = 0; i < cops.size(); i++) {
+                    Cop cop = (Cop) cops.get(i);
+                    if (th.isTopCollision(cop)) {
+                        System.err.println("Collided with cop");
+                        return true;
+                    }
+                }
+            } else if (type == BOTTOM_COLLISION) {
+                for (int i = 0; i < cops.size(); i++) {
+                    Cop cop = (Cop) cops.get(i);
+                    if (th.isBottomCollision(cop)) {
+                        System.err.println("Collided with cop");
+                        return true;
+                    }
                 }
             }
-            return false;
+        }else if(team.equalsIgnoreCase("guardie")){
+            Cop cp = (Cop) cops.get(PID);
+            if(type == BOTTOM_COLLISION){
+                for (int i = 0; i < thiefs.size(); i++) {
+                    Thief th = (Thief) thiefs.get(i);
+                    if (cp.isBottomCollision(th)) {
+                        System.err.println("Collided with thief.");
+                        return true;
+                    }
+                }
+            }else if(type == TOP_COLLISION){
+                for (int i = 0; i < thiefs.size(); i++) {
+                    Thief th = (Thief) thiefs.get(i);
+                    if (cp.isTopCollision(th)) {
+                        System.err.println("Collided with thief.");
+                        return true;
+                    }
+                }
+            }else if(type == RIGHT_COLLISION){
+                for (int i = 0; i < thiefs.size(); i++) {
+                    Thief th = (Thief) thiefs.get(i);
+                    if (cp.isRightCollision(th)) {
+                        System.err.println("Collided with thief.");
+                        return true;
+                    }
+                }
+            }else if(type == LEFT_COLLISION){
+                for (int i = 0; i < thiefs.size(); i++) {
+                    Thief th = (Thief) thiefs.get(i);
+                    if (cp.isLeftCollision(th)) {
+                        System.err.println("Collided with thief.");
+                        return true;
+                    }
+                }
+            }
         }
-        //TODO Finish collisions
-        //TODO Add safe zone for thieves
         //TODO Add capture for cops - remove player from board keep connection
         return false;
     }
