@@ -132,16 +132,57 @@ public class Board extends JPanel implements Runnable{
     }
 
     public void buildWorld(Graphics g) {
-
         g.setColor(new Color(250, 240, 170));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        boolean chk;
 
         ArrayList world = new ArrayList();
         world.addAll(areas);
         world.addAll(areac);
         world.addAll(baggs);
-        world.addAll(cops);
-        world.addAll(thiefs);
+        
+        int c = 0;
+        while(true){
+            try{
+                cops.get(c);
+                try{
+                    chk = (boolean)cops.get(c);
+                }
+                catch(ClassCastException e){
+                    chk = true;
+                }
+                if(chk == false){
+                } else{
+                    world.add((Cop)cops.get(c));
+                }
+            }
+            catch(IndexOutOfBoundsException e){
+                break;
+            }
+            c++;
+        }
+        
+        int t = 0;
+        while(true){
+            try{
+                thiefs.get(t);
+                try{
+                    chk = (boolean)thiefs.get(t);
+                }
+                catch(ClassCastException e){
+                    chk = true;
+                }
+                if(chk == false){
+                } else{
+                    world.add((Thief)thiefs.get(t));
+                }
+            }
+            catch(IndexOutOfBoundsException e){
+                break;
+            }
+            t++;
+        }
+        
         world.add(soko);
         world.addAll(walls);
 
@@ -512,14 +553,18 @@ public class Board extends JPanel implements Runnable{
                 int k = 0;
                 while(true){
                     try{
-                        chk = (Thief) thiefs.get(k);
-                        if(chk.x() == c.x() && chk.y() == c.y()){
-                            System.out.println("Coordinates already used; X: " + c.x() + " Y: " + c.y());
-                            found = true;
+                        try{
+                            chk = (Thief) thiefs.get(k);
+                            if(chk.x() == c.x() && chk.y() == c.y()){
+                                System.out.println("Coordinates already used; X: " + c.x() + " Y: " + c.y());
+                                found = true;
+                            }
+                        }
+                        catch(IndexOutOfBoundsException e){
+                            break;
                         }
                     }
-                    catch(IndexOutOfBoundsException e){
-                        break;
+                    catch(ClassCastException e){
                     }
                     k++;
                 }
@@ -538,22 +583,26 @@ public class Board extends JPanel implements Runnable{
             }
         }else if(team.equalsIgnoreCase("guardie")){
             while(true){
-                int randomspawn = ran.nextInt(areac.size());
+                int randomspawn = ran.nextInt(areas.size());
                 Area a = (Area) areas.get(randomspawn);
-                System.err.println("Cop ArrayList size: " + thiefs.size());
+                System.err.println("Cop ArrayList size: " + cops.size());
                 Cop chk;
                 boolean found = false;
                 int k = 0;
                 while(true){
                     try{
-                        chk = (Cop) cops.get(k);
-                        if(chk.x() == a.x() && chk.y() == a.y()){
-                            System.out.println("Coordinates already used; X: " + a.x() + " Y: " + a.y());
-                            found = true;
+                        try{
+                            chk = (Cop) cops.get(k);
+                            if(chk.x() == a.x() && chk.y() == a.y()){
+                                System.out.println("Coordinates already used; X: " + a.x() + " Y: " + a.y());
+                                found = true;
+                            }
+                        }
+                        catch(IndexOutOfBoundsException e){
+                            break;
                         }
                     }
-                    catch(IndexOutOfBoundsException e){
-                        break;
+                    catch(ClassCastException e){
                     }
                     k++;
                 }
@@ -577,14 +626,14 @@ public class Board extends JPanel implements Runnable{
         if (team.equalsIgnoreCase("ladri")) {
             try{
                 id_thiefs.set(PID, true);
-                thiefs.remove(PID);
+                thiefs.set(PID, false);
             }catch(IndexOutOfBoundsException e){
                 e.printStackTrace();
             }
         }else if (team.equalsIgnoreCase("guardie")) {
             try{
                 id_cops.set(PID, true);
-                cops.remove(PID);
+                cops.set(PID, false);
             }catch(IndexOutOfBoundsException e){
                 e.printStackTrace();
             }
