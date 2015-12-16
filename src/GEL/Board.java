@@ -327,6 +327,7 @@ public class Board extends JPanel implements Runnable{
                 }
                 thieves.move(SPACE, 0, "r");
             }
+            isSafe(PID);
         }else if(team.equalsIgnoreCase("guardie")){
             if (direction.equalsIgnoreCase("W")) {
                 Cop cp = (Cop) cops.get(PID);
@@ -386,7 +387,8 @@ public class Board extends JPanel implements Runnable{
             zone = (Area) areas.get(i);
             if(zone.x() == th.x() && zone.y() == th.y()){
                 System.err.println("Thief ID: " + PID + " is in the safe zone.");
-                //TODO clear out the player
+                releaseID(PID, "ladri");
+                return true;
             }
         }
         return false;
@@ -398,7 +400,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < cops.size(); i++) {
                     Cop cop = (Cop) cops.get(i);
                     if (th.isLeftCollision(cop)) {
-                        System.err.println("Collided with cop");
+                        System.err.println("ID: " + PID + " collided with cop");
+                        releaseID(PID, team);
                         return true;
                     }
                 }
@@ -407,7 +410,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < cops.size(); i++) {
                     Cop cop = (Cop) cops.get(i);
                     if (th.isRightCollision(cop)) {
-                        System.err.println("Collided with cop");
+                        System.err.println("ID: " + PID + " collided with cop");
+                        releaseID(PID, team);
                         return true;
                     }
                 }
@@ -415,7 +419,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < cops.size(); i++) {
                     Cop cop = (Cop) cops.get(i);
                     if (th.isTopCollision(cop)) {
-                        System.err.println("Collided with cop");
+                        System.err.println("ID: " + PID + " collided with cop");
+                        releaseID(PID, team);
                         return true;
                     }
                 }
@@ -423,7 +428,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < cops.size(); i++) {
                     Cop cop = (Cop) cops.get(i);
                     if (th.isBottomCollision(cop)) {
-                        System.err.println("Collided with cop");
+                        System.err.println("ID: " + PID + " collided with cop");
+                        releaseID(PID, team);
                         return true;
                     }
                 }
@@ -434,7 +440,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < thiefs.size(); i++) {
                     Thief th = (Thief) thiefs.get(i);
                     if (cp.isBottomCollision(th)) {
-                        System.err.println("Collided with thief.");
+                        System.err.println("ID: " + PID +" collided with thief.");
+                        releaseID(i, "ladri");
                         return true;
                     }
                 }
@@ -442,7 +449,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < thiefs.size(); i++) {
                     Thief th = (Thief) thiefs.get(i);
                     if (cp.isTopCollision(th)) {
-                        System.err.println("Collided with thief.");
+                        System.err.println("ID: " + PID +" collided with thief.");
+                        releaseID(i, "ladri");
                         return true;
                     }
                 }
@@ -450,7 +458,8 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < thiefs.size(); i++) {
                     Thief th = (Thief) thiefs.get(i);
                     if (cp.isRightCollision(th)) {
-                        System.err.println("Collided with thief.");
+                        System.err.println("ID: " + PID +" collided with thief.");
+                        releaseID(i, "ladri");
                         return true;
                     }
                 }
@@ -458,13 +467,13 @@ public class Board extends JPanel implements Runnable{
                 for (int i = 0; i < thiefs.size(); i++) {
                     Thief th = (Thief) thiefs.get(i);
                     if (cp.isLeftCollision(th)) {
-                        System.err.println("Collided with thief.");
+                        System.err.println("ID: " + PID +" collided with thief.");
+                        releaseID(i, "ladri");
                         return true;
                     }
                 }
             }
         }
-        //TODO Add capture for cops - remove player from board keep connection
         return false;
     }
     private static boolean checkWallCollision(Actor actor, int type) {
