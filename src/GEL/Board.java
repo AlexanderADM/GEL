@@ -634,7 +634,6 @@ public class Board extends JPanel implements Runnable{
         }
     }
     public void restartLevel() {
-
         areas.clear();
         baggs.clear();
         walls.clear();

@@ -3,7 +3,10 @@ package GEL;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
+import java.util.Scanner;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Client extends javax.swing.JFrame {
     Socket con;
@@ -11,7 +14,12 @@ public class Client extends javax.swing.JFrame {
     PrintWriter pw;
 
     CheckServer r = new CheckServer();
-    Thread check;
+    SendCmd command = new SendCmd();
+    Thread check, cmd;
+    
+    Scanner sc = new Scanner(System.in);
+    
+    private static boolean completed = false;
     
     
     public Client() {
@@ -110,9 +118,12 @@ public class Client extends javax.swing.JFrame {
             if (name.getText().length() > 1) {
                 if (Play.getText().equals("Esci")) {
                     //check.interrupt();
+                    cmd.interrupt();
                     pw.println("exit");
                     pw.flush();
                     con.close();
+                    pw.close();
+                    br.close();
                     Play.setText("Gioca");
                     Guardia.setEnabled(true);
                     Ladro.setEnabled(true);
@@ -120,8 +131,6 @@ public class Client extends javax.swing.JFrame {
 
                 } else {
                     con = new Socket("127.0.0.1", 12345);
-                    //check = new Thread(r);
-                    //check.start();
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
                     if (Guardia.isSelected()) {
@@ -140,9 +149,12 @@ public class Client extends javax.swing.JFrame {
                         Ladro.setEnabled(false);
                         name.setEnabled(false);
                         //TODO Movement for computer client
-                        addKeyListener(new T2Adapter());
-                        setFocusable(true);
-
+                        //addKeyListener(new T2Adapter());
+                        //setFocusable(true);
+                        //check = new Thread(r);
+                        //check.start();
+                        cmd = new Thread(command);
+                        cmd.start();
                     }
                     else if(mess.equalsIgnoreCase("error")){
                         System.err.println("Error");
@@ -198,17 +210,44 @@ public class Client extends javax.swing.JFrame {
             }
         });
     }
+    
+    public class SendCmd implements Runnable{
+        public void run(){
+            while(true){
+                String s;
+                s = sc.nextLine();
+                pw.println(s);
+                pw.flush();
+            }
+        }
+    }
 
     public class CheckServer implements Runnable{
-        public void run(){
-            try{
-                while(true){
-                    Thread.sleep(200);
-                    System.out.println("banana");
+        public void run(){            
+            int test;
+            while(true){
+                try{
+                    
+                    //test = con.getInputStream().read();
+                    try {
+                        //Thread.sleep(1000);
+                        //System.out.println("" + test);
+                        if(con.getInputStream().read() == -1){
+                            con.close();
+                            pw.close();
+                            br.close();
+                            Play.setText("Gioca");
+                            Guardia.setEnabled(true);
+                            Ladro.setEnabled(true);
+                            name.setEnabled(true);
+                            Thread.sleep(100);
+                            check.interrupt();
+                            Thread.sleep(2000);
+                        }
+                    } catch (InterruptedException e) {
+                    }
+                } catch(IOException e){
                 }
-            }
-            catch(InterruptedException e){
-                e.printStackTrace();
             }
         }
     }
