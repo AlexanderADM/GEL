@@ -109,7 +109,7 @@ public class Client extends javax.swing.JFrame {
         try {
             if (name.getText().length() > 1) {
                 if (Play.getText().equals("Esci")) {
-                    check.interrupt();
+                    //check.interrupt();
                     pw.println("exit");
                     pw.flush();
                     con.close();
@@ -120,8 +120,8 @@ public class Client extends javax.swing.JFrame {
 
                 } else {
                     con = new Socket("127.0.0.1", 12345);
-                    check = new Thread(r);
-                    check.start();
+                    //check = new Thread(r);
+                    //check.start();
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
                     if (Guardia.isSelected()) {

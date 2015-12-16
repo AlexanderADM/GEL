@@ -475,7 +475,7 @@ public class Board extends JPanel implements Runnable{
             completed = false;
         }
     }
-
+    
 
     synchronized static int getEmptyID(String team){
         int ID = 0;
@@ -500,27 +500,30 @@ public class Board extends JPanel implements Runnable{
         }
         return ID; //Se torna "9" allora non ci sono posti disponibili
     }
-/*    public static boolean checkThiefSpawn(int x, int y){
-        Thief check;
-        for(int i = 0; i < thiefs.size(); i++){
-            check = (Thief) thiefs.get(i);
-            if(check.x() != x){
-                System.err.println("OK X: " + x);
-                if(check.y() != y){
-                   System.err.println("OK Y: " + y);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }*/
+    
     synchronized static void randomSpawn(int PID, String team){
         if(team.equalsIgnoreCase("ladri")){
-            //while(true) {
+            while(true) {
                 int randomspawn = ran.nextInt(areac.size());
-                AreaC c = ( AreaC ) areac.get(randomspawn);
+                AreaC c = (AreaC) areac.get(randomspawn);
                 System.err.println("Thief ArrayList size: " + thiefs.size());
-                //if (checkThiefSpawn(c.x(),c.y())) {
+                Thief chk;
+                boolean found = false;
+                int k = 0;
+                while(true){
+                    try{
+                        chk = (Thief) thiefs.get(k);
+                        if(chk.x() == c.x() && chk.y() == c.y()){
+                            System.out.println("Coordinates already used; X: " + c.x() + " Y: " + c.y());
+                            found = true;
+                        }
+                    }
+                    catch(IndexOutOfBoundsException e){
+                        break;
+                    }
+                    k++;
+                }
+                if (found == false) {
                     Thief a = new Thief(c.x(), c.y());
                     System.err.println("Created new Thief");
                     System.err.println("X: " + c.x() + " Y: " + c.y());
@@ -530,30 +533,46 @@ public class Board extends JPanel implements Runnable{
                     }catch(IndexOutOfBoundsException e){
                         thiefs.add(PID, a);
                     }
-
-
-                    //break;
-                //}
-            //}
-                //TODO Sometimes users spawn in the same position fix the position check
+                    break;
+                }
+            }
         }else if(team.equalsIgnoreCase("guardie")){
             while(true){
-                int randomspawn = ran.nextInt(areas.size());
+                int randomspawn = ran.nextInt(areac.size());
                 Area a = (Area) areas.get(randomspawn);
-                System.err.println("Cop arraylist size: " + cops.size());
-                Cop b = new Cop(a.x(),a.y());
-                System.err.println("Created new Cop");
-                System.err.println("X: " + a.x() + " Y: " + a.y());
-                try{
-                    cops.get(PID);
-                    cops.set(PID, b);
-                }catch(IndexOutOfBoundsException e){
-                    cops.add(PID, b);
+                System.err.println("Cop ArrayList size: " + thiefs.size());
+                Cop chk;
+                boolean found = false;
+                int k = 0;
+                while(true){
+                    try{
+                        chk = (Cop) cops.get(k);
+                        if(chk.x() == a.x() && chk.y() == a.y()){
+                            System.out.println("Coordinates already used; X: " + a.x() + " Y: " + a.y());
+                            found = true;
+                        }
+                    }
+                    catch(IndexOutOfBoundsException e){
+                        break;
+                    }
+                    k++;
                 }
-
+                if (found == false) {
+                    Cop b = new Cop(a.x(), a.y());
+                    System.err.println("Created new Cop");
+                    System.err.println("X: " + a.x() + " Y: " + a.y());
+                    try{
+                        cops.get(PID);
+                        cops.set(PID, b);
+                    }catch(IndexOutOfBoundsException e){
+                        cops.add(PID, b);
+                    }
+                    break;
+                }
             }
         }
     }
+    
     synchronized static void releaseID(int PID, String team){
         if (team.equalsIgnoreCase("ladri")) {
             try{
