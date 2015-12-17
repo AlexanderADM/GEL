@@ -49,7 +49,7 @@ public class Board extends JPanel implements Runnable{
                     + "#                                                   ..#\n"
                     + "#                                                     #\n"
                     + "#           @                                         #\n"
-                    + "#            $                                        #\n"
+                    + "#            $    %                                   #\n"
                     + "#                                                     #\n"
                     + "#                                                     #\n"
                     + "#                                                     #\n"
@@ -242,18 +242,11 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(soko, LEFT_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(LEFT_COLLISION)) {
-                    return;
-                }
                 soko.move(-SPACE, 0, "l");
 
             } else if (key == KeyEvent.VK_RIGHT) {
 
                 if (checkWallCollision(soko, RIGHT_COLLISION)) {
-                    return;
-                }
-
-                if (checkBagCollision(RIGHT_COLLISION)) {
                     return;
                 }
 
@@ -265,19 +258,11 @@ public class Board extends JPanel implements Runnable{
                     return;
                 }
 
-                if (checkBagCollision(TOP_COLLISION)) {
-                    return;
-                }
-
                 soko.move(0, -SPACE, "u");
 
             } else if (key == KeyEvent.VK_DOWN) {
 
                 if (checkWallCollision(soko, BOTTOM_COLLISION)) {
-                    return;
-                }
-
-                if (checkBagCollision(BOTTOM_COLLISION)) {
                     return;
                 }
 
@@ -297,7 +282,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(thieves, TOP_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(TOP_COLLISION)) {
+                if (checkBagCollision(PID, TOP_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
@@ -309,7 +294,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(thieves, BOTTOM_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(BOTTOM_COLLISION)) {
+                if (checkBagCollision(PID, BOTTOM_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
@@ -321,7 +306,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(thieves, LEFT_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(LEFT_COLLISION)) {
+                if (checkBagCollision(PID, LEFT_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
@@ -333,7 +318,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(thieves, RIGHT_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(RIGHT_COLLISION)) {
+                if (checkBagCollision(PID, RIGHT_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
@@ -348,7 +333,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(cp, TOP_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(TOP_COLLISION)) {
+                if (checkBagCollision(PID, TOP_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
@@ -360,7 +345,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(cp, BOTTOM_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(BOTTOM_COLLISION)) {
+                if (checkBagCollision(PID, BOTTOM_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
@@ -372,7 +357,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(cp, LEFT_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(LEFT_COLLISION)) {
+                if (checkBagCollision(PID, LEFT_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
@@ -384,7 +369,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(cp, RIGHT_COLLISION)) {
                     return;
                 }
-                if (checkBagCollision(RIGHT_COLLISION)) {
+                if (checkBagCollision(PID, RIGHT_COLLISION)) {
                     return;
                 }
                 if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
@@ -559,99 +544,235 @@ public class Board extends JPanel implements Runnable{
         return false;
     }
 
-    private static boolean checkBagCollision(int type) {
-
+    private static boolean checkBagCollision(int PID, int type) {
+        Thief th;
+        Cop cp;
         if (type == LEFT_COLLISION) {
+            try {
+                th = (Thief) thiefs.get(PID);
+                for (int i = 0; i < baggs.size(); i++) {
 
-            for (int i = 0; i < baggs.size(); i++) {
+                    Baggage bag = (Baggage) baggs.get(i);
 
-                Baggage bag = (Baggage) baggs.get(i);
-                if (soko.isLeftCollision(bag)) {
+                    if (soko.isLeftCollision(bag) || th.isLeftCollision(bag)) {
 
-                    for (int j=0; j < baggs.size(); j++) {
-                        Baggage item = (Baggage) baggs.get(j);
-                        if (!bag.equals(item)) {
-                            if (bag.isLeftCollision(item)) {
+                        for (int y = 0; y < baggs.size(); y++) {
+                            Baggage item = (Baggage) baggs.get(y);
+                            if (!bag.equals(item)) {
+                                if (bag.isLeftCollision(item)) {
+                                    return true;
+                                }
+                            }
+                            if (checkWallCollision(bag, LEFT_COLLISION)) {
                                 return true;
                             }
                         }
-                        if (checkWallCollision(bag, LEFT_COLLISION)) {
-                            return true;
-                        }
+                        bag.move(-SPACE, 0);
                     }
-                    bag.move(-SPACE, 0);
                 }
+            }catch(IndexOutOfBoundsException e){
+                //e.printStackTrace();
+            }catch(ClassCastException e){
+                //e.printStackTrace();
+            }
+            try {
+                cp = (Cop) cops.get(PID);
+                for (int j = 0; j < baggs.size(); j++) {
+
+                    Baggage bag = (Baggage) baggs.get(j);
+
+                    if (soko.isLeftCollision(bag) || cp.isLeftCollision(bag)) {
+
+                        for (int y = 0; y < baggs.size(); y++) {
+                            Baggage item = (Baggage) baggs.get(y);
+                            if (!bag.equals(item)) {
+                                if (bag.isLeftCollision(item)) {
+                                    return true;
+                                }
+                            }
+                            if (checkWallCollision(bag, LEFT_COLLISION)) {
+                                return true;
+                            }
+                        }
+                        bag.move(-SPACE, 0);
+                    }
+                }
+            }catch(IndexOutOfBoundsException e){
+                //e.printStackTrace();
+            }catch(ClassCastException e){
+                //e.printStackTrace();
             }
             return false;
-
         } else if (type == RIGHT_COLLISION) {
+                try {
+                    th = (Thief) thiefs.get(PID);
+                    for (int i = 0; i < baggs.size(); i++) {
 
-            for (int i = 0; i < baggs.size(); i++) {
+                        Baggage bag = (Baggage) baggs.get(i);
 
-                Baggage bag = (Baggage) baggs.get(i);
-                if (soko.isRightCollision(bag)) {
-                    for (int j=0; j < baggs.size(); j++) {
+                        if (soko.isRightCollision(bag) || th.isRightCollision(bag)) {
 
-                        Baggage item = (Baggage) baggs.get(j);
-                        if (!bag.equals(item)) {
-                            if (bag.isRightCollision(item)) {
-                                return true;
+                            for (int y = 0; y < baggs.size(); y++) {
+                                Baggage item = (Baggage) baggs.get(y);
+                                if (!bag.equals(item)) {
+                                    if (bag.isRightCollision(item)) {
+                                        return true;
+                                    }
+                                }
+                                if (checkWallCollision(bag, RIGHT_COLLISION)) {
+                                    return true;
+                                }
                             }
-                        }
-                        if (checkWallCollision(bag, RIGHT_COLLISION)) {
-                            return true;
+                            bag.move(SPACE, 0);
                         }
                     }
-                    bag.move(SPACE, 0);
+                }catch(IndexOutOfBoundsException e){
+                    //e.printStackTrace();
+                }catch(ClassCastException e){
+                    //e.printStackTrace();
                 }
-            }
+                try {
+                    cp = (Cop) cops.get(PID);
+                    for (int j = 0; j < baggs.size(); j++) {
+
+                        Baggage bag = (Baggage) baggs.get(j);
+
+                        if (soko.isRightCollision(bag) || cp.isRightCollision(bag)) {
+
+                            for (int y = 0; y < baggs.size(); y++) {
+                                Baggage item = (Baggage) baggs.get(y);
+                                if (!bag.equals(item)) {
+                                    if (bag.isRightCollision(item)) {
+                                        return true;
+                                    }
+                                }
+                                if (checkWallCollision(bag, RIGHT_COLLISION)) {
+                                    return true;
+                                }
+                            }
+                            bag.move(SPACE, 0);
+                        }
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    //e.printStackTrace();
+                }catch(ClassCastException e){
+                    //e.printStackTrace();
+                }
             return false;
 
         } else if (type == TOP_COLLISION) {
+                try {
+                    th = (Thief) thiefs.get(PID);
+                    for (int i = 0; i < baggs.size(); i++) {
 
-            for (int i = 0; i < baggs.size(); i++) {
+                        Baggage bag = (Baggage) baggs.get(i);
 
-                Baggage bag = (Baggage) baggs.get(i);
-                if (soko.isTopCollision(bag)) {
-                    for (int j = 0; j < baggs.size(); j++) {
+                        if (soko.isTopCollision(bag) || th.isTopCollision(bag)) {
 
-                        Baggage item = (Baggage) baggs.get(j);
-                        if (!bag.equals(item)) {
-                            if (bag.isTopCollision(item)) {
-                                return true;
+                            for (int y = 0; y < baggs.size(); y++) {
+                                Baggage item = (Baggage) baggs.get(y);
+                                if (!bag.equals(item)) {
+                                    if (bag.isTopCollision(item)) {
+                                        return true;
+                                    }
+                                }
+                                if (checkWallCollision(bag, TOP_COLLISION)) {
+                                    return true;
+                                }
                             }
-                        }
-                        if (checkWallCollision(bag, TOP_COLLISION)) {
-                            return true;
+                            bag.move(0, -SPACE);
                         }
                     }
-                    bag.move(0, -SPACE);
+                }catch(IndexOutOfBoundsException e){
+                    //e.printStackTrace();
+                }catch(ClassCastException e){
+                   // e.printStackTrace();
                 }
-            }
+                try{
+                    cp = (Cop) cops.get(PID);
+                    for (int j = 0; j < baggs.size(); j++) {
 
+                        Baggage bag = (Baggage) baggs.get(j);
+
+                        if (soko.isTopCollision(bag) || cp.isTopCollision(bag)) {
+
+                            for (int y = 0; y < baggs.size(); y++) {
+                                Baggage item = (Baggage) baggs.get(y);
+                                if (!bag.equals(item)) {
+                                    if (bag.isTopCollision(item)) {
+                                        return true;
+                                    }
+                                }
+                                if (checkWallCollision(bag, TOP_COLLISION)) {
+                                    return true;
+                                }
+                            }
+                            bag.move(0, -SPACE);
+                        }
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    //e.printStackTrace();
+                }catch(ClassCastException e){
+                    //e.printStackTrace();
+                }
             return false;
 
         } else if (type == BOTTOM_COLLISION) {
-        
-            for (int i = 0; i < baggs.size(); i++) {
+                try {
+                    th = (Thief) thiefs.get(PID);
+                    for (int i = 0; i < baggs.size(); i++) {
 
-                Baggage bag = (Baggage) baggs.get(i);
-                if (soko.isBottomCollision(bag)) {
-                    for (int j = 0; j < baggs.size(); j++) {
+                        Baggage bag = (Baggage) baggs.get(i);
 
-                        Baggage item = (Baggage) baggs.get(j);
-                        if (!bag.equals(item)) {
-                            if (bag.isBottomCollision(item)) {
-                                return true;
+                        if (soko.isBottomCollision(bag) || th.isBottomCollision(bag)) {
+
+                            for (int y = 0; y < baggs.size(); y++) {
+                                Baggage item = (Baggage) baggs.get(y);
+                                if (!bag.equals(item)) {
+                                    if (bag.isBottomCollision(item)) {
+                                        return true;
+                                    }
+                                }
+                                if (checkWallCollision(bag, BOTTOM_COLLISION)) {
+                                    return true;
+                                }
                             }
-                        }
-                        if (checkWallCollision(bag, BOTTOM_COLLISION)) {
-                            return true;
+                            bag.move(0, SPACE);
                         }
                     }
-                    bag.move(0, SPACE);
+                }catch(IndexOutOfBoundsException e){
+                    //e.printStackTrace();
+                }catch(ClassCastException e){
+                    //e.printStackTrace();
                 }
-            }
+                try{
+                    cp = (Cop) cops.get(PID);
+                    for (int j = 0; j < baggs.size(); j++) {
+
+                        Baggage bag = (Baggage) baggs.get(j);
+
+                        if (soko.isBottomCollision(bag) || cp.isBottomCollision(bag)) {
+
+                            for (int y = 0; y < baggs.size(); y++) {
+                                Baggage item = (Baggage) baggs.get(y);
+                                if (!bag.equals(item)) {
+                                    if (bag.isBottomCollision(item)) {
+                                        return true;
+                                    }
+                                }
+                                if (checkWallCollision(bag, BOTTOM_COLLISION)) {
+                                    return true;
+                                }
+                            }
+                            bag.move(0, SPACE);
+                        }
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    //e.printStackTrace();
+                }catch(ClassCastException e){
+                    //e.printStackTrace();
+                }
+            return false;
         }
 
         return false;

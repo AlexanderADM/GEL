@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Date;
 
 public class ClientThread implements Runnable{
     //Declaring variable for the connection.
@@ -12,6 +13,7 @@ public class ClientThread implements Runnable{
     PrintWriter pw;
     Socket s;
     String squad,name,cmd;
+    Date time = new Date();
     int PID; // Unique ID per player
     // Starting Client Thread
     public ClientThread(Socket conn){
@@ -53,6 +55,8 @@ public class ClientThread implements Runnable{
                 }
             }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() == true){
                 PID = Board.getEmptyID(squad);
+                time.getTime();
+                System.err.println("Time is : " + time);
                 if(PID == 9){
                     System.err.println("Client Thread from + " + s);
                     System.err.println("Maximum players reached, stopping thread and closing connection");
@@ -84,7 +88,7 @@ public class ClientThread implements Runnable{
             Board.randomSpawn(PID, squad);
 
             while(true){
-                System.err.println("Waiting client move");
+                //System.err.println("Waiting client move");
                 cmd = br.readLine();
                 if(cmd == null || cmd.equalsIgnoreCase("exit")){
                     Board.releaseID(PID,squad);
@@ -96,7 +100,7 @@ public class ClientThread implements Runnable{
                     Thread.sleep(2000);
                 }
                 Board.movePlayer(PID, squad, cmd);
-                System.err.println("Client entered: " + cmd);
+                //System.err.println("Client entered: " + cmd);
             }
         }catch(IOException e){
             System.err.println(e);
