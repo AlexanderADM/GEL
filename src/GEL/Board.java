@@ -4,12 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 public class Board extends JPanel implements Runnable{ 
@@ -22,6 +18,7 @@ public class Board extends JPanel implements Runnable{
     private static final int BOTTOM_COLLISION = 4;
     private static Random ran = new Random();
     private static ArrayList walls = new ArrayList();
+    private static ArrayList grs = new ArrayList();
     private static ArrayList baggs = new ArrayList();
     private static ArrayList areas = new ArrayList();
     private static ArrayList areac = new ArrayList();
@@ -38,14 +35,14 @@ public class Board extends JPanel implements Runnable{
     private static String level =
                       "#######################################################\n"
                     + "#£££££££#                                             #\n"
-                    + "#£££££££#  ##############   ######  ########  #####   #\n"
-                    + "#£££££££#  #            #   ######  ########  #####   #\n"
-                    + "#£££££££#  #            #   ######  ########  #####   #\n"
-                    + "#£££££££#  #            #   ######                    #\n"
-                    + "##$$$####  #            #   ######  #####  ########   #\n"
-                    + "##   ####  #            #   ######  #####  ########   #\n"
-                    + "##   ####  #            #           #####  ########   #\n"
-                    + "##   ####  ##############  ###  ###                   #\n"
+                    + "#£££££££#  <============>   QWWWWE  ########  #####   #\n"
+                    + "#£££££££#  [----*--*----[   ASSSSD  ########  #####   #\n"
+                    + "#£££££££#  [*****--*****[   ZXXXXC  ########  #####   #\n"
+                    + "#£££££££#  [------------[   assssd                    #\n"
+                    + "##$$$####  [------------[   a`ss`d  #####  ########   #\n"
+                    + "##   ####  [*****--*****[   zxxxxc  #####  ########   #\n"
+                    + "##   ####  [----*--*----[           #####  ########   #\n"
+                    + "##   ####  {============}  ###  ###                   #\n"
                     + "##                         ###  ###                   #\n"
                     + "##                         ###  ###                   #\n"
                     + "##                         ###  ###              ##$$##\n"
@@ -98,7 +95,7 @@ public class Board extends JPanel implements Runnable{
         int y = OFFSET;
         
         Wall wall;
-        Water water;
+        Grass grass;
         Baggage b;
         Area a;
         AreaC e;
@@ -118,12 +115,40 @@ public class Board extends JPanel implements Runnable{
 
                 x = OFFSET;
             } else if (item == '#') {
-                wall = new Wall(x, y);
+                wall = new Wall(x, y, "wall");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '-') {
+                grass = new Grass(x, y, "grass");
+                grs.add(grass);
+                x += SPACE;
+            }else if (item == '[') {
+                wall = new Wall(x, y, "siepev");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '=') {
+                wall = new Wall(x, y,"siepe");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '{') {
+                wall = new Wall(x, y,"siepeasw");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '}') {
+                wall = new Wall(x, y,"siepease");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '<') {
+                wall = new Wall(x, y,"siepeanw");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '>') {
+                wall = new Wall(x, y,"siepeane");
                 walls.add(wall);
                 x += SPACE;
             }else if(item == '+'){
-                water = new Water(x, y);
-                walls.add(water);
+                wall = new Wall(x, y,"water");
+                walls.add(wall);
                 x += SPACE;
             } else if (item == '$') {
                 b = new Baggage(x, y);
@@ -148,6 +173,74 @@ public class Board extends JPanel implements Runnable{
                 x += SPACE;
             }else if (item == ' ') {
                 x += SPACE;
+            }else if (item == 'z') {
+                wall = new Wall(x, y,"casa1");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'x') {
+                wall = new Wall(x, y,"casa2");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'c') {
+                wall = new Wall(x, y,"casa3");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'a') {
+                wall = new Wall(x, y,"casa4");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'd') {
+                wall = new Wall(x, y,"casa5");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 's') {
+                wall = new Wall(x, y,"casa6");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '`') {
+                wall = new Wall(x, y,"casa7");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Z') {
+                wall = new Wall(x, y,"tetto1");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'X') {
+                wall = new Wall(x, y,"tetto2");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'C') {
+                wall = new Wall(x, y,"tetto3");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'A') {
+                wall = new Wall(x, y,"tetto4");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'S') {
+                wall = new Wall(x, y,"tetto5");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'D') {
+                wall = new Wall(x, y,"tetto6");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Q') {
+                wall = new Wall(x, y,"tetto7");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'W') {
+                wall = new Wall(x, y,"tetto8");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'E') {
+                wall = new Wall(x, y,"tetto9");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '*') {
+                wall = new Wall(x, y,"piantina");
+                walls.add(wall);
+                x += SPACE;
             }
 
             h = y;
@@ -162,6 +255,7 @@ public class Board extends JPanel implements Runnable{
         ArrayList world = new ArrayList();
         world.addAll(areas);
         world.addAll(areac);
+        world.addAll(grs);
         world.addAll(baggs);
         
         int c = 0;
