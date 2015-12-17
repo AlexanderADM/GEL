@@ -51,9 +51,9 @@ public class Board extends JPanel implements Runnable{
                     + "##                         ###  ###              ##$$##\n"
                     + "##   ########  ########              ##########  #....#\n"
                     + "##   ########  ########    ########  ##########  #....#\n"
-                    + "##   ########  ########    #      #  ##########  $....#\n"
-                    + "##                         #      #              $....#\n"
-                    + "##   ########  ########    #      #  ##########  $....#\n"
+                    + "##   ########  ########    #++++++#  ##########  $....#\n"
+                    + "##                         #++++++#              $....#\n"
+                    + "##   ########  ########    #++++++#  ##########  $....#\n"
                     + "##   ########  ########    ########  ##########  #....#\n"
                     + "##   ########  ########              ##########  #....#\n"
                     + "##                         ###  ###              ##$$##\n"
@@ -98,6 +98,7 @@ public class Board extends JPanel implements Runnable{
         int y = OFFSET;
         
         Wall wall;
+        Water water;
         Baggage b;
         Area a;
         AreaC e;
@@ -119,6 +120,10 @@ public class Board extends JPanel implements Runnable{
             } else if (item == '#') {
                 wall = new Wall(x, y);
                 walls.add(wall);
+                x += SPACE;
+            }else if(item == '+'){
+                water = new Water(x, y);
+                walls.add(water);
                 x += SPACE;
             } else if (item == '$') {
                 b = new Baggage(x, y);
@@ -210,7 +215,7 @@ public class Board extends JPanel implements Runnable{
 
             if ((item instanceof Thief)
                     || (item instanceof Baggage)) {
-                g.drawImage(item.getImage(), item.x() + 2, item.y() + 2, this);
+                g.drawImage(item.getImage(), item.x(), item.y(), this);
             } else {
                 g.drawImage(item.getImage(), item.x(), item.y(), this);
             }
