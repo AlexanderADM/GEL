@@ -412,39 +412,51 @@ public class Board extends JPanel implements Runnable{
             Thief th = (Thief) thiefs.get(PID);
             if (type == LEFT_COLLISION) {
                 for (int i = 0; i < cops.size(); i++) {
-                    Cop cop = (Cop) cops.get(i);
-                    if (th.isLeftCollision(cop)) {
-                        System.err.println("ID: " + PID + " collided with cop");
-                        releaseID(PID, team);
-                        return true;
+                    try{
+                        Cop cop = (Cop) cops.get(i);
+                        if (th.isLeftCollision(cop)) {
+                            System.err.println("ID: " + PID + " collided with cop");
+                            releaseID(PID, team);
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
                 return false;
             } else if (type == RIGHT_COLLISION) {
                 for (int i = 0; i < cops.size(); i++) {
-                    Cop cop = (Cop) cops.get(i);
-                    if (th.isRightCollision(cop)) {
-                        System.err.println("ID: " + PID + " collided with cop");
-                        releaseID(PID, team);
-                        return true;
+                    try{
+                        Cop cop = (Cop) cops.get(i);
+                        if (th.isRightCollision(cop)) {
+                            System.err.println("ID: " + PID + " collided with cop");
+                            releaseID(PID, team);
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             } else if (type == TOP_COLLISION) {
                 for (int i = 0; i < cops.size(); i++) {
-                    Cop cop = (Cop) cops.get(i);
-                    if (th.isTopCollision(cop)) {
-                        System.err.println("ID: " + PID + " collided with cop");
-                        releaseID(PID, team);
-                        return true;
+                    try{
+                        Cop cop = (Cop) cops.get(i);
+                        if (th.isTopCollision(cop)) {
+                            System.err.println("ID: " + PID + " collided with cop");
+                            releaseID(PID, team);
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             } else if (type == BOTTOM_COLLISION) {
                 for (int i = 0; i < cops.size(); i++) {
-                    Cop cop = (Cop) cops.get(i);
-                    if (th.isBottomCollision(cop)) {
-                        System.err.println("ID: " + PID + " collided with cop");
-                        releaseID(PID, team);
-                        return true;
+                    try{
+                        Cop cop = (Cop) cops.get(i);
+                        if (th.isBottomCollision(cop)) {
+                            System.err.println("ID: " + PID + " collided with cop");
+                            releaseID(PID, team);
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             }
@@ -452,38 +464,50 @@ public class Board extends JPanel implements Runnable{
             Cop cp = (Cop) cops.get(PID);
             if(type == BOTTOM_COLLISION){
                 for (int i = 0; i < thiefs.size(); i++) {
-                    Thief th = (Thief) thiefs.get(i);
-                    if (cp.isBottomCollision(th)) {
-                        System.err.println("ID: " + PID +" collided with thief.");
-                        releaseID(i, "ladri");
-                        return true;
+                    try{
+                        Thief th = (Thief) thiefs.get(i);
+                        if (cp.isBottomCollision(th)) {
+                            System.err.println("ID: " + PID +" collided with thief.");
+                            releaseID(i, "ladri");
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             }else if(type == TOP_COLLISION){
                 for (int i = 0; i < thiefs.size(); i++) {
-                    Thief th = (Thief) thiefs.get(i);
-                    if (cp.isTopCollision(th)) {
-                        System.err.println("ID: " + PID +" collided with thief.");
-                        releaseID(i, "ladri");
-                        return true;
+                    try{
+                        Thief th = (Thief) thiefs.get(i);
+                        if (cp.isTopCollision(th)) {
+                            System.err.println("ID: " + PID +" collided with thief.");
+                            releaseID(i, "ladri");
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             }else if(type == RIGHT_COLLISION){
                 for (int i = 0; i < thiefs.size(); i++) {
-                    Thief th = (Thief) thiefs.get(i);
-                    if (cp.isRightCollision(th)) {
-                        System.err.println("ID: " + PID +" collided with thief.");
-                        releaseID(i, "ladri");
-                        return true;
+                    try{
+                        Thief th = (Thief) thiefs.get(i);
+                        if (cp.isRightCollision(th)) {
+                            System.err.println("ID: " + PID +" collided with thief.");
+                            releaseID(i, "ladri");
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             }else if(type == LEFT_COLLISION){
                 for (int i = 0; i < thiefs.size(); i++) {
-                    Thief th = (Thief) thiefs.get(i);
-                    if (cp.isLeftCollision(th)) {
-                        System.err.println("ID: " + PID +" collided with thief.");
-                        releaseID(i, "ladri");
-                        return true;
+                    try{
+                        Thief th = (Thief) thiefs.get(i);
+                        if (cp.isLeftCollision(th)) {
+                            System.err.println("ID: " + PID +" collided with thief.");
+                            releaseID(i, "ladri");
+                            return true;
+                        }
+                    }catch(ClassCastException e){
                     }
                 }
             }

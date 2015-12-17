@@ -3,21 +3,15 @@ package GEL;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.util.Scanner;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class Client extends javax.swing.JFrame {
+public class Client extends javax.swing.JFrame{
     Socket con;
     BufferedReader br;
     PrintWriter pw;
 
-    CheckServer r = new CheckServer();
-    SendCmd command = new SendCmd();
-    Thread check, cmd;
-    
-    Scanner sc = new Scanner(System.in);
+    checkServer r = new checkServer();
+    Thread check;
     
     private static boolean completed = false;
     
@@ -26,6 +20,9 @@ public class Client extends javax.swing.JFrame {
         initComponents();
         setResizable(false);
         Play.setEnabled(false);
+        Play.addKeyListener(new TAdapter());        
+        setFocusable(true);
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -41,6 +38,11 @@ public class Client extends javax.swing.JFrame {
         Play = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         buttonGroup1.add(Guardia);
         Guardia.setText("Guardia");
@@ -118,7 +120,6 @@ public class Client extends javax.swing.JFrame {
             if (name.getText().length() > 1) {
                 if (Play.getText().equals("Esci")) {
                     //check.interrupt();
-                    cmd.interrupt();
                     pw.println("exit");
                     pw.flush();
                     con.close();
@@ -128,8 +129,8 @@ public class Client extends javax.swing.JFrame {
                     Guardia.setEnabled(true);
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
-
                 } else {
+                    
                     con = new Socket("127.0.0.1", 12345);
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
@@ -147,14 +148,9 @@ public class Client extends javax.swing.JFrame {
                         Play.setText("Esci");
                         Guardia.setEnabled(false);
                         Ladro.setEnabled(false);
-                        name.setEnabled(false);
-                        //TODO Movement for computer client
-                        //addKeyListener(new T2Adapter());
-                        //setFocusable(true);
+                        name.setEnabled(false);                        
                         //check = new Thread(r);
                         //check.start();
-                        cmd = new Thread(command);
-                        cmd.start();
                     }
                     else if(mess.equalsIgnoreCase("error")){
                         System.err.println("Error");
@@ -178,6 +174,10 @@ public class Client extends javax.swing.JFrame {
     private void LadroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LadroActionPerformed
         Play.setEnabled(true);
     }//GEN-LAST:event_LadroActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        
+    }//GEN-LAST:event_formKeyPressed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -205,29 +205,17 @@ public class Client extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run() {                
                 new Client().setVisible(true);
             }
         });
     }
-    
-    public class SendCmd implements Runnable{
-        public void run(){
-            while(true){
-                String s;
-                s = sc.nextLine();
-                pw.println(s);
-                pw.flush();
-            }
-        }
-    }
 
-    public class CheckServer implements Runnable{
+    public class checkServer implements Runnable{
         public void run(){            
             int test;
             while(true){
-                try{
-                    
+                try{                    
                     //test = con.getInputStream().read();
                     try {
                         //Thread.sleep(1000);
@@ -252,30 +240,33 @@ public class Client extends javax.swing.JFrame {
         }
     }
 
-    public class T2Adapter extends KeyAdapter {
-
+    public class TAdapter extends KeyAdapter {
         
-        public T2Adapter(){
-            //TODO Finish this
-        }
         
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println("OK");
+            
+            /*if (completed) {
+                return;
+            }*/
+            
             int key = e.getKeyCode();
             
-            System.out.println(key);
             if (key == KeyEvent.VK_LEFT) {
-                System.out.println("LEFT");
+                pw.println("a");
+                pw.flush();
             }
             else if (key == KeyEvent.VK_RIGHT) {
-                System.out.println("RIGHT");
+                pw.println("d");
+                pw.flush();
             }
             else if (key == KeyEvent.VK_UP) {    
-                System.out.println("UP");
+                pw.println("w");
+                pw.flush();
             }
             else if (key == KeyEvent.VK_DOWN) {     
-                System.out.println("DOWN");
+                pw.println("s");
+                pw.flush();
             }
         } 
     }
