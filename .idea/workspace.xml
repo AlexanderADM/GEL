@@ -5,10 +5,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/GEL/Client.java" line="245" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34ba0939-c776-41ba-b21b-4054ead991c9" name="Default" comment="Box Collision">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GEL/Water.java" />
+    <list default="true" id="34ba0939-c776-41ba-b21b-4054ead991c9" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/GEL/res/water.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GEL/Board.java" afterPath="$PROJECT_DIR$/src/GEL/Board.java" />
     </list>
     <ignored path="GEL.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -854,7 +853,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450343650967</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="New Textures">
+      <created>1450369586229</created>
+      <option name="number" value="00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1450369586229</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TodoView">
@@ -914,7 +919,8 @@
     <MESSAGE value="Collision added with PID and squad, added safe zone check" />
     <MESSAGE value="SafeZone method, Thief capture" />
     <MESSAGE value="Box Collision" />
-    <option name="LAST_COMMIT_MESSAGE" value="Box Collision" />
+    <MESSAGE value="New Textures" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Textures" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
