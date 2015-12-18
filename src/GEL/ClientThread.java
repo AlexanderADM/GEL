@@ -32,7 +32,9 @@ public class ClientThread implements Runnable{
             System.err.println("Waiting for client to select squad.");
             System.err.println("Ladri squad has " + Board.thiefs.size() + " players");
             System.err.println("Cops squad has  " + Board.cops.size()   + " players");
-            squad = br.readLine();
+            System.out.println("" + System.currentTimeMillis());
+            squad = br.readLine();            
+            
             if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() == true){
                 PID = Board.getEmptyID(squad);
                 if(PID == 9){
@@ -81,11 +83,15 @@ public class ClientThread implements Runnable{
 
             System.err.println("Client selected squad : " + squad);
             System.err.println("Waiting for client username: ");
+            
             name = br.readLine();
             Board.randomSpawn(PID, squad);
+            long time = System.currentTimeMillis();
             while(true){
                 //System.err.println("Waiting client move");
+                
                 cmd = br.readLine();
+                
                 if(cmd == null || cmd.equalsIgnoreCase("exit")){
                     Board.releaseID(PID,squad);
                     pw.close();
@@ -94,12 +100,15 @@ public class ClientThread implements Runnable{
                     //TODO Client forced connection / closed
                     Thread.currentThread().interrupt();
                     Thread.sleep(2000);
-                }
-                if(!Board.movePlayer(PID, squad, cmd)){
-                    pw.close();
-                    br.close();
-                    s.close();
-                    break;
+                }               
+                while(System.currentTimeMillis() - 40 > time){
+                    if(!Board.movePlayer(PID, squad, cmd)){
+                        pw.close();
+                        br.close();
+                        s.close();
+                        break;
+                    }
+                    time = System.currentTimeMillis();
                 }
                 //System.err.println("Client entered: " + cmd);
             }

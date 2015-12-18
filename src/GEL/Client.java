@@ -22,7 +22,7 @@ public class Client extends javax.swing.JFrame{
         Play.setEnabled(false);
         Play.addKeyListener(new TAdapter());        
         setFocusable(true);
-        
+        //setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);        
     }
 
     @SuppressWarnings("unchecked")
@@ -244,14 +244,13 @@ public class Client extends javax.swing.JFrame{
         
         
         @Override
-        public void keyPressed(KeyEvent e) {
+        public void keyPressed (KeyEvent e) {
             
-            /*if (completed) {
+            if (completed) {
                 return;
-            }*/
+            }
             
             int key = e.getKeyCode();
-            
             if (key == KeyEvent.VK_LEFT) {
                 pw.println("a");
                 pw.flush();
@@ -268,7 +267,7 @@ public class Client extends javax.swing.JFrame{
                 pw.println("s");
                 pw.flush();
             }
-        } 
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
