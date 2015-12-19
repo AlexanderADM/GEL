@@ -22,7 +22,7 @@ public class Client extends javax.swing.JFrame{
         Play.setEnabled(false);
         Play.addKeyListener(new TAdapter());        
         setFocusable(true);
-        //setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);        
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);        
     }
 
     @SuppressWarnings("unchecked")
@@ -119,7 +119,7 @@ public class Client extends javax.swing.JFrame{
         try {
             if (name.getText().length() > 1) {
                 if (Play.getText().equals("Esci")) {
-                    //check.interrupt();
+                    check.interrupt();
                     pw.println("exit");
                     pw.flush();
                     con.close();
@@ -129,8 +129,7 @@ public class Client extends javax.swing.JFrame{
                     Guardia.setEnabled(true);
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
-                } else {
-                    
+                } else {                    
                     con = new Socket("127.0.0.1", 12345);
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
@@ -149,8 +148,8 @@ public class Client extends javax.swing.JFrame{
                         Guardia.setEnabled(false);
                         Ladro.setEnabled(false);
                         name.setEnabled(false);                        
-                        //check = new Thread(r);
-                        //check.start();
+                        check = new Thread(r);
+                        check.start();
                     }
                     else if(mess.equalsIgnoreCase("error")){
                         System.err.println("Error");
@@ -213,35 +212,27 @@ public class Client extends javax.swing.JFrame{
 
     public class checkServer implements Runnable{
         public void run(){            
-            int test;
-            while(true){
-                try{                    
-                    //test = con.getInputStream().read();
-                    try {
-                        //Thread.sleep(1000);
-                        //System.out.println("" + test);
-                        if(con.getInputStream().read() == -1){
-                            con.close();
-                            pw.close();
-                            br.close();
-                            Play.setText("Gioca");
-                            Guardia.setEnabled(true);
-                            Ladro.setEnabled(true);
-                            name.setEnabled(true);
-                            Thread.sleep(100);
-                            check.interrupt();
-                            Thread.sleep(2000);
-                        }
-                    } catch (InterruptedException e) {
-                    }
-                } catch(IOException e){
+            try{
+                String status = br.readLine();
+                if(status.equalsIgnoreCase("disconnect")){
+                    con.close();
+                    pw.close();
+                    br.close();
+                    Play.setText("Gioca");
+                    Guardia.setEnabled(true);
+                    Ladro.setEnabled(true);
+                    name.setEnabled(true);
+                    Thread.sleep(100);
+                    check.interrupt();
+                    Thread.sleep(2000);
                 }
+            } catch (InterruptedException e) {
+            } catch(IOException e) {
             }
         }
     }
 
-    public class TAdapter extends KeyAdapter {
-        
+    public class TAdapter extends KeyAdapter {        
         
         @Override
         public void keyPressed (KeyEvent e) {

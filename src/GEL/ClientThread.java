@@ -27,7 +27,7 @@ public class ClientThread implements Runnable{
         try {
             br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             pw = new PrintWriter(s.getOutputStream());
-            System.err.println("Connection from : " + s);
+            System.err.println("Connection from: " + s);
             System.err.println("Connection established - initialized I/O methods");
             System.err.println("Waiting for client to select squad.");
             System.err.println("Ladri squad has " + Board.thiefs.size() + " players");
@@ -38,7 +38,7 @@ public class ClientThread implements Runnable{
             if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() == true){
                 PID = Board.getEmptyID(squad);
                 if(PID == 9){
-                    System.err.println("Client Thread from + " + s);
+                    System.err.println("Client Thread from: " + s);
                     System.err.println("Maximum players reached, stopping thread and closing connection");
                     pw.println("error");
                     pw.flush();
@@ -88,8 +88,6 @@ public class ClientThread implements Runnable{
             Board.randomSpawn(PID, squad);
             long time = System.currentTimeMillis();
             while(true){
-                //System.err.println("Waiting client move");
-                
                 cmd = br.readLine();
                 
                 if(cmd == null || cmd.equalsIgnoreCase("exit")){
@@ -97,12 +95,13 @@ public class ClientThread implements Runnable{
                     pw.close();
                     br.close();
                     s.close();
-                    //TODO Client forced connection / closed
                     Thread.currentThread().interrupt();
                     Thread.sleep(2000);
                 }               
                 while(System.currentTimeMillis() - 40 > time){
                     if(!Board.movePlayer(PID, squad, cmd)){
+                        pw.println("disconnect");
+                        pw.flush();
                         pw.close();
                         br.close();
                         s.close();
@@ -110,7 +109,6 @@ public class ClientThread implements Runnable{
                     }
                     time = System.currentTimeMillis();
                 }
-                //System.err.println("Client entered: " + cmd);
             }
         }catch(IOException e){
             System.err.println(e);

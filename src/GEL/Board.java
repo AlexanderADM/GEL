@@ -25,7 +25,6 @@ public class Board extends JPanel implements Runnable{
     protected static ArrayList thiefs = new ArrayList();
     protected static ArrayList cops = new ArrayList();
     public static final int MAXPLAYER = 9;
-    private static ArrayList cop_times = new ArrayList();
     private static ArrayList id_thiefs = new ArrayList();
     private static ArrayList id_cops = new ArrayList();
     private static Thief soko;
@@ -33,38 +32,38 @@ public class Board extends JPanel implements Runnable{
     private int h = 0;
     private static boolean completed = false;
     private static String level =
-                      "#######################################################\n"
-                    + "#£££££££#                                             #\n"
-                    + "#£££££££#  <============>   QWWWWE  ########  #####   #\n"
-                    + "#£££££££#  [----*--*----[   ASSSSD  ########  #####   #\n"
-                    + "#£££££££#  [*****--*****[   ZXXXXC  ########  #####   #\n"
-                    + "#£££££££#  [------------[   assssd                    #\n"
-                    + "##$$$####  [------------[   a`ss`d  #####  ########   #\n"
-                    + "##   ####  [*****--*****[   zxxxxc  #####  ########   #\n"
-                    + "##   ####  [----*--*----[           #####  ########   #\n"
-                    + "##   ####  {============}  ###  ###                   #\n"
-                    + "##                         ###  ###                   #\n"
-                    + "##                         ###  ###                   #\n"
-                    + "##                         ###  ###              ##$$##\n"
-                    + "##   ########  ########              ##########  #....#\n"
-                    + "##   ########  ########    ########  ##########  #....#\n"
-                    + "##   ########  ########    #++++++#  ##########  $....#\n"
-                    + "##                         #++++++#              $....#\n"
-                    + "##   ########  ########    #++++++#  ##########  $....#\n"
-                    + "##   ########  ########    ########  ##########  #....#\n"
-                    + "##   ########  ########              ##########  #....#\n"
-                    + "##                         ###  ###              ##$$##\n"
-                    + "##                         ###  ###                   #\n"
-                    + "##   ####  ######  ######  ###  ###  ######  ######   #\n"
-                    + "##   ####  ######  ######  ###  ###  ######  ######   #\n"
-                    + "##   ####  ######  ######            ######  ######   #\n"
-                    + "##$$$####  ######  ######   ######   ######  ######   #\n"
-                    + "#£££££££#  ######  ######   #    #   ######  ######   #\n"
-                    + "#£££££££#  ######  ######   #    #   ######  ######   #\n"
-                    + "#£££@£££#  ######  ######   #    #   ######  ######   #\n"
-                    + "#£££££££#  ######  ######   ######   ######  ######   #\n"
-                    + "#£££££££#                                             #\n"
-                    + "#######################################################\n";
+                      "<=====================================================>\n"
+                    + "[£££££££[?????????????????????????????????????????????[\n"
+                    + "[£££££££[??<====>--<====>???QWWWWE??***--***??tyyyu???[\n"
+                    + "[£££££££[??[-^^-*--*-^^-[???ASSSSD??*--^-^-*??ghhhj???[\n"
+                    + "[£££££££[??{*****--*****}???ZXXXXC??***^-***??bnnnm???[\n"
+                    + "[£££££££[??----------^---???assssd????????????????????[\n"
+                    + "[$$$$===}??--^------^^---???a`ss`d??tyyyu??QWWWWWWE???[\n"
+                    + "[????****??<*****--*****>???zxxxxc??ghhhj??ZXXXXXXC???[\n"
+                    + "[????*^^*??[-^^-*--*-^^-[???????????bnnnm??bnnnnnnm???[\n"
+                    + "[????****??{====}--{====}??QWE??QWE???????????????????[\n"
+                    + "[??????????????????????????ZXC??ZXC???????????????????[\n"
+                    + "[??????????????????????????a`d??a`d???????????????????[\n"
+                    + "[????70&&&&¬9??70&&&&¬9????zxc??zxc??????????????<=$$=[\n"
+                    + "[????4èòòòòà6??4èòòòòà6??????????????????????????[....[\n"
+                    + "[????12222223??12222223????IOOOOOOP??????????????[....[\n"
+                    + "[??????????????????????????J++++++L??↕‼¶§§§¶▬↑???$....[\n"
+                    + "[??????????????????????????J++++++L??♪♫☼☼☼☼☼►◄???$....[\n"
+                    + "[????ÕÌÌÌÌÌÌÖ??ÕÌÌÌÌÌÌÖ????J++++++L??○◙▲Å©®▲♂♀???$....[\n"
+                    + "[????ÑÁÁÁÁÁÁÿ??ÑÁÁÁÁÁÁÿ????BNNNNNNM??_••¡¢¤••◘???[....[\n"
+                    + "[????12222223??12222223??????????????????????????[....[\n"
+                    + "[??????????????????????????QWE??QWE??????????????{=$$=[\n"
+                    + "[??????????????????????????ZXC??ZXC???????????????????[\n"
+                    + "[????****??<============>??a`d??a`d??789ÕÌÖ??ÕÌÖ789???[\n"
+                    + "[????*^^*??[--^^--^--^--[??zxc??zxc??456ÑÁÿ??ÑÁÿ456???[\n"
+                    + "[????****??{============}????????????123123??123123???[\n"
+                    + "[$$$$===>???????????????????<====>????????????????????[\n"
+                    + "[£££££££[???????????????????[-^^-[????????????????????[\n"
+                    + "[£££££££[??<============>???[--^-[???789ÕÌÖ??ÕÌÖ789???[\n"
+                    + "[£££@£££[??[--^---^^----[???[-^--[???456ÑÁÿ??ÑÁÿ456???[\n"
+                    + "[£££££££[??{============}???{====}???123123??123123???[\n"
+                    + "[£££££££[?????????????????????????????????????????????[\n"
+                    + "{=====================================================}\n";
 
     public Board() {
         addKeyListener(new TAdapter());
@@ -112,9 +111,8 @@ public class Board extends JPanel implements Runnable{
                 if (this.w < x) {
                     this.w = x;
                 }
-
                 x = OFFSET;
-            } else if (item == '#') {
+            }else if (item == '#') {
                 wall = new Wall(x, y, "wall");
                 walls.add(wall);
                 x += SPACE;
@@ -163,12 +161,12 @@ public class Board extends JPanel implements Runnable{
                 areac.add(e);
                 x += SPACE;
             } else if (item == '@') {
-                soko = new Thief(x, y);
-                d = new Thief(x, y);
+                soko = new Thief(x, y, 0);
+                d = new Thief(x, y, 0);
                 thiefs.add(d);
                 x += SPACE;
             }else if  (item == '%'){
-                c = new Cop(x, y);
+                c = new Cop(x, y, 0);
                 cops.add(c);
                 x += SPACE;
             }else if (item == ' ') {
@@ -237,11 +235,276 @@ public class Board extends JPanel implements Runnable{
                 wall = new Wall(x, y,"tetto9");
                 walls.add(wall);
                 x += SPACE;
+            }else if (item == 'b') {
+                wall = new Wall(x, y,"cb1");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'n') {
+                wall = new Wall(x, y,"cb2");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'm') {
+                wall = new Wall(x, y,"cb3");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'g') {
+                wall = new Wall(x, y,"cb4");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'h') {
+                wall = new Wall(x, y,"cb5");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'j') {
+                wall = new Wall(x, y,"cb6");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 't') {
+                wall = new Wall(x, y,"cb7");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'y') {
+                wall = new Wall(x, y,"cb8");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'u') {
+                wall = new Wall(x, y,"cb9");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'M') {
+                wall = new Wall(x, y,"angse");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'B') {
+                wall = new Wall(x, y,"angsw");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'I') {
+                wall = new Wall(x, y,"angnw");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'P') {
+                wall = new Wall(x, y,"angne");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'J') {
+                wall = new Wall(x, y,"ws");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'O') {
+                wall = new Wall(x, y,"wt");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'L') {
+                wall = new Wall(x, y,"wd");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'N') {
+                wall = new Wall(x, y,"wst");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '?') {
+                grass = new Grass(x, y, "pietra");
+                grs.add(grass);
+                x += SPACE;
+            }else if (item == '~') {
+                grass = new Grass(x, y, "porta");
+                grs.add(grass);
+                x += SPACE;
             }else if (item == '*') {
                 wall = new Wall(x, y,"piantina");
                 walls.add(wall);
                 x += SPACE;
+            }else if (item == '1') {
+                wall = new Wall(x, y,"tenda1");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '2') {
+                wall = new Wall(x, y,"tenda2");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '3') {
+                wall = new Wall(x, y,"tenda3");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '4') {
+                wall = new Wall(x, y,"tenda4");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '5') {
+                wall = new Wall(x, y,"tenda5");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '6') {
+                wall = new Wall(x, y,"tenda6");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '7') {
+                wall = new Wall(x, y,"tenda7");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '8') {
+                wall = new Wall(x, y,"tenda8");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '9') {
+                wall = new Wall(x, y,"tenda9");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '0') {
+                wall = new Wall(x, y,"tenda0");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '&') {
+                wall = new Wall(x, y,"tenda11");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '¬') {
+                wall = new Wall(x, y,"tenda12");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'è') {
+                wall = new Wall(x, y,"tenda13");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'ò') {
+                wall = new Wall(x, y,"tenda14");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'à') {
+                wall = new Wall(x, y,"tenda15");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Ñ') {
+                wall = new Wall(x, y,"tendina1");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Á') {
+                wall = new Wall(x, y,"tendina2");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'ÿ') {
+                wall = new Wall(x, y,"tendina3");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Õ') {
+                wall = new Wall(x, y,"tendina4");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Ì') {
+                wall = new Wall(x, y,"tendina5");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Ö') {
+                wall = new Wall(x, y,"tendina6");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '^') {
+                grass = new Grass(x, y, "fiorellino");
+                grs.add(grass);
+                x += SPACE;;
+            }else if (item == '_') {
+                wall = new Wall(x, y, "pala1");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '•') {
+                wall = new Wall(x, y, "pala2");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '◘') {
+                wall = new Wall(x, y, "pala3");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '○') {
+                wall = new Wall(x, y, "pala4");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '◙') {
+                wall = new Wall(x, y, "pala5");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '♂') {
+                wall = new Wall(x, y, "pala6");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '♀') {
+                wall = new Wall(x, y, "pala7");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '♪') {
+                wall = new Wall(x, y, "pala8");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '♫') {
+                wall = new Wall(x, y, "pala9");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '☼') {
+                wall = new Wall(x, y, "pala10");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '►') {
+                wall = new Wall(x, y, "pala11");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '◄') {
+                wall = new Wall(x, y, "pala12");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '↕') {
+                wall = new Wall(x, y, "pala13");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '‼') {
+                wall = new Wall(x, y, "pala14");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '¶') {
+                wall = new Wall(x, y, "pala15");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '§') {
+                wall = new Wall(x, y, "pala16");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '▬') {
+                wall = new Wall(x, y, "pala17");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '↑') {
+                wall = new Wall(x, y, "pala18");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '▲') {
+                wall = new Wall(x, y, "pala19");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '¡') {
+                wall = new Wall(x, y, "pala20");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '¢') {
+                wall = new Wall(x, y, "pala21");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '¤') {
+                wall = new Wall(x, y, "pala22");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == 'Å') {
+                wall = new Wall(x, y, "pala23");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '©') {
+                wall = new Wall(x, y, "pala24");
+                walls.add(wall);
+                x += SPACE;
+            }else if (item == '®') {
+                wall = new Wall(x, y, "pala25");
+                walls.add(wall);
+                x += SPACE;
             }
+
 
             h = y;
         }
@@ -345,7 +608,7 @@ public class Board extends JPanel implements Runnable{
                 if (checkWallCollision(soko, LEFT_COLLISION)) {
                     return;
                 }
-                soko.move(-SPACE, 0, "l");
+                soko.move(-SPACE, 0, "l", 0);
 
             } else if (key == KeyEvent.VK_RIGHT) {
 
@@ -353,7 +616,7 @@ public class Board extends JPanel implements Runnable{
                     return;
                 }
 
-                soko.move(SPACE, 0, "r");
+                soko.move(SPACE, 0, "r", 0);
 
             } else if (key == KeyEvent.VK_UP) {
 
@@ -361,7 +624,7 @@ public class Board extends JPanel implements Runnable{
                     return;
                 }
 
-                soko.move(0, -SPACE, "u");
+                soko.move(0, -SPACE, "u", 0);
 
             } else if (key == KeyEvent.VK_DOWN) {
 
@@ -369,7 +632,7 @@ public class Board extends JPanel implements Runnable{
                     return;
                 }
 
-                soko.move(0, SPACE, "d");
+                soko.move(0, SPACE, "d", 0);
 
             } else if (key == KeyEvent.VK_R) {
                 restartLevel();
@@ -392,7 +655,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
                         return false;
                     }
-                    thieves.move(0, -SPACE, "u");
+                    thieves.move(0, -SPACE, "u", PID);
                 } else if (direction.equalsIgnoreCase("S")) {
                     Thief thieves = (Thief) thiefs.get(PID);
                     if (checkWallCollision(thieves, BOTTOM_COLLISION)) {
@@ -404,7 +667,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
                         return false;
                     }
-                    thieves.move(0, SPACE, "d");
+                    thieves.move(0, SPACE, "d", PID);
                 } else if (direction.equalsIgnoreCase("A")) {
                     Thief thieves = (Thief) thiefs.get(PID);
                     if (checkWallCollision(thieves, LEFT_COLLISION)) {
@@ -416,7 +679,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
                         return false;
                     }
-                    thieves.move(-SPACE, 0, "l");
+                    thieves.move(-SPACE, 0, "l", PID);
                 } else if (direction.equalsIgnoreCase("D")) {
                     Thief thieves = (Thief) thiefs.get(PID);
                     if (checkWallCollision(thieves, RIGHT_COLLISION)) {
@@ -428,7 +691,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
                         return false;
                     }
-                    thieves.move(SPACE, 0, "r");
+                    thieves.move(SPACE, 0, "r", PID);
                 }
                 isSafe(PID);
             }else if(team.equalsIgnoreCase("guardie")){
@@ -443,7 +706,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
                         return true;
                     }
-                    cp.move(0, -SPACE, "u");
+                    cp.move(0, -SPACE, "u", PID);
                 } else if (direction.equalsIgnoreCase("S")) {
                     Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, BOTTOM_COLLISION)) {
@@ -455,7 +718,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
                         return true;
                     }
-                    cp.move(0, SPACE, "d");
+                    cp.move(0, SPACE, "d", PID);
                 } else if (direction.equalsIgnoreCase("A")) {
                     Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, LEFT_COLLISION)) {
@@ -467,7 +730,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
                         return true;
                     }
-                    cp.move(-SPACE, 0, "l");
+                    cp.move(-SPACE, 0, "l", PID);
                 } else if (direction.equalsIgnoreCase("D")) {
                     Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, RIGHT_COLLISION)) {
@@ -479,7 +742,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
                         return true;
                     }
-                    cp.move(SPACE, 0, "r");
+                    cp.move(SPACE, 0, "r", PID);
                 }
             }
         }catch(ClassCastException e){
@@ -930,27 +1193,37 @@ public class Board extends JPanel implements Runnable{
             synchronized (thiefs) {
                 repaint();
             }
-            /*try {
-                Thread.sleep(50);
+            try {
+                Thread.sleep(40);
             } catch (InterruptedException ex) {
-                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
+            }
         }
     }
     public void restartLevel() {
         areas.clear();
         baggs.clear();
         walls.clear();
-        thiefs.clear();
-        cops.clear();
         areac.clear();
+        grs.clear();
         initWorld();
+        for(int i = 0; i < thiefs.size(); i++){
+            try{
+                releaseID(i, "ladri");
+            } catch(IndexOutOfBoundsException e){
+            }
+        }
+        for(int i = 0; i < cops.size(); i++){
+            try{
+                releaseID(i, "guardie");
+            } catch(IndexOutOfBoundsException e){
+            }
+        }
         if (completed) {
             completed = false;
         }
     }
     
-
+    
     synchronized static int getEmptyID(String team){
         int ID = 0;
         if (team.equalsIgnoreCase("ladri")) {
@@ -1002,7 +1275,7 @@ public class Board extends JPanel implements Runnable{
                     k++;
                 }
                 if (found == false) {
-                    Thief a = new Thief(c.x(), c.y());
+                    Thief a = new Thief(c.x(), c.y(), PID);
                     System.err.println("Created new Thief");
                     System.err.println("X: " + c.x() + " Y: " + c.y());
                     try{
@@ -1040,7 +1313,7 @@ public class Board extends JPanel implements Runnable{
                     k++;
                 }
                 if (found == false) {
-                    Cop b = new Cop(a.x(), a.y());
+                    Cop b = new Cop(a.x(), a.y(), PID);
                     System.err.println("Created new Cop");
                     System.err.println("X: " + a.x() + " Y: " + a.y());
                     try{
