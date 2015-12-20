@@ -19,6 +19,7 @@ public class Board extends JPanel implements Runnable{
     private static Random ran = new Random();
     private static ArrayList walls = new ArrayList();
     private static ArrayList grs = new ArrayList();
+    private static ArrayList tende = new ArrayList();
     private static ArrayList baggs = new ArrayList();
     private static ArrayList areas = new ArrayList();
     private static ArrayList areac = new ArrayList();
@@ -27,7 +28,7 @@ public class Board extends JPanel implements Runnable{
     public static final int MAXPLAYER = 9;
     private static ArrayList id_thiefs = new ArrayList();
     private static ArrayList id_cops = new ArrayList();
-    private static Thief soko;
+    //private static Thief soko;
     private int w = 0;
     private int h = 0;
     private static boolean completed = false;
@@ -60,14 +61,14 @@ public class Board extends JPanel implements Runnable{
                     + "[$$$$===>???????????????????<====>????????????????????[\n"
                     + "[£££££££[???????????????????[-^^-[????????????????????[\n"
                     + "[£££££££[??<============>???[--^-[???789ÕÌÖ??ÕÌÖ789???[\n"
-                    + "[£££@£££[??[--^---^^----[???[-^--[???456ÑÁÿ??ÑÁÿ456???[\n"
+                    + "[£££££££[??[--^---^^----[???[-^--[???456ÑÁÿ??ÑÁÿ456???[\n"
                     + "[£££££££[??{============}???{====}???123123??123123???[\n"
                     + "[£££££££[?????????????????????????????????????????????[\n"
                     + "{=====================================================}\n";
 
     public Board() {
-        addKeyListener(new TAdapter());
-        setFocusable(true);
+        //addKeyListener(new TAdapter());
+        //setFocusable(true);
         initWorld();
         new Thread(this).start();
         for(int i = 0; i < MAXPLAYER; i++){
@@ -95,6 +96,7 @@ public class Board extends JPanel implements Runnable{
         
         Wall wall;
         Grass grass;
+        Tenda tenda;
         Baggage b;
         Area a;
         AreaC e;
@@ -161,7 +163,7 @@ public class Board extends JPanel implements Runnable{
                 areac.add(e);
                 x += SPACE;
             } else if (item == '@') {
-                soko = new Thief(x, y, 0);
+                //soko = new Thief(x, y, 0);
                 d = new Thief(x, y, 0);
                 thiefs.add(d);
                 x += SPACE;
@@ -320,84 +322,84 @@ public class Board extends JPanel implements Runnable{
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '2') {
-                wall = new Wall(x, y,"tenda2");
-                walls.add(wall);
+                grass = new Grass(x, y,"tenda2");
+                grs.add(grass);
                 x += SPACE;
             }else if (item == '3') {
                 wall = new Wall(x, y,"tenda3");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '4') {
-                wall = new Wall(x, y,"tenda4");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda4");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '5') {
-                wall = new Wall(x, y,"tenda5");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda5");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '6') {
-                wall = new Wall(x, y,"tenda6");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda6");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '7') {
-                wall = new Wall(x, y,"tenda7");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda7");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '8') {
-                wall = new Wall(x, y,"tenda8");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda8");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '9') {
-                wall = new Wall(x, y,"tenda9");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda9");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '0') {
-                wall = new Wall(x, y,"tenda0");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda0");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '&') {
-                wall = new Wall(x, y,"tenda11");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda11");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '¬') {
-                wall = new Wall(x, y,"tenda12");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda12");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'è') {
-                wall = new Wall(x, y,"tenda13");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda13");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'ò') {
-                wall = new Wall(x, y,"tenda14");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda14");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'à') {
-                wall = new Wall(x, y,"tenda15");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tenda15");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'Ñ') {
-                wall = new Wall(x, y,"tendina1");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tendina1");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'Á') {
-                wall = new Wall(x, y,"tendina2");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tendina2");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'ÿ') {
-                wall = new Wall(x, y,"tendina3");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tendina3");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'Õ') {
-                wall = new Wall(x, y,"tendina4");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tendina4");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'Ì') {
-                wall = new Wall(x, y,"tendina5");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tendina5");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == 'Ö') {
-                wall = new Wall(x, y,"tendina6");
-                walls.add(wall);
+                tenda = new Tenda(x, y,"tendina6");
+                tende.add(tenda);
                 x += SPACE;
             }else if (item == '^') {
                 grass = new Grass(x, y, "fiorellino");
@@ -511,7 +513,7 @@ public class Board extends JPanel implements Runnable{
     }
 
     public void buildWorld(Graphics g) {
-        g.setColor(new Color(250, 240, 170));
+        g.setColor(new Color(77, 109, 46));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         boolean chk;
 
@@ -562,8 +564,10 @@ public class Board extends JPanel implements Runnable{
             t++;
         }
         
-        world.add(soko);
+        //world.add(soko);
+        
         world.addAll(baggs);
+        world.addAll(tende);
         world.addAll(walls);
 
         for (int i = 0; i < world.size(); i++) {
@@ -591,7 +595,7 @@ public class Board extends JPanel implements Runnable{
         buildWorld(g);
     }
 
-    class TAdapter extends KeyAdapter {
+    /*class TAdapter extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -640,7 +644,8 @@ public class Board extends JPanel implements Runnable{
 
             repaint();
         }
-    }
+    }*/
+    
     synchronized static boolean movePlayer(int PID,String team, String direction){
         try{
             if(team.equalsIgnoreCase("ladri")) {
@@ -951,7 +956,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(i);
 
-                        if (soko.isLeftCollision(bag) || th.isLeftCollision(bag)) {
+                        if (th.isLeftCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -979,7 +984,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(j);
 
-                        if (soko.isLeftCollision(bag) || cp.isLeftCollision(bag)) {
+                        if (cp.isLeftCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -1010,7 +1015,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(i);
 
-                        if (soko.isRightCollision(bag) || th.isRightCollision(bag)) {
+                        if (th.isRightCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -1038,7 +1043,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(j);
 
-                        if (soko.isRightCollision(bag) || cp.isRightCollision(bag)) {
+                        if (cp.isRightCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -1070,7 +1075,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(i);
 
-                        if (soko.isTopCollision(bag) || th.isTopCollision(bag)) {
+                        if (th.isTopCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -1098,7 +1103,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(j);
 
-                        if (soko.isTopCollision(bag) || cp.isTopCollision(bag)) {
+                        if (cp.isTopCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -1130,7 +1135,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(i);
 
-                        if (soko.isBottomCollision(bag) || th.isBottomCollision(bag)) {
+                        if (th.isBottomCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);
@@ -1158,7 +1163,7 @@ public class Board extends JPanel implements Runnable{
 
                         Baggage bag = (Baggage) baggs.get(j);
 
-                        if (soko.isBottomCollision(bag) || cp.isBottomCollision(bag)) {
+                        if (cp.isBottomCollision(bag)) {
 
                             for (int y = 0; y < baggs.size(); y++) {
                                 Baggage item = (Baggage) baggs.get(y);

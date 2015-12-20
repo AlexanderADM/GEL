@@ -25,6 +25,11 @@ public class Grass extends Actor {
             ImageIcon iia = new ImageIcon(loc);
             image = iia.getImage();
             this.setImage(image);
+        }else if(type.equalsIgnoreCase("tenda2")){
+            URL loc = this.getClass().getResource("\\res\\tenda2.png");
+            ImageIcon iia = new ImageIcon(loc);
+            image = iia.getImage();
+            this.setImage(image);
         }
     }
 }
