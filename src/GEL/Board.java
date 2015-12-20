@@ -67,8 +67,8 @@ public class Board extends JPanel implements Runnable{
                     + "{=====================================================}\n";
 
     public Board() {
-        //addKeyListener(new TAdapter());
-        //setFocusable(true);
+        addKeyListener(new TAdapter());
+        setFocusable(true);
         initWorld();
         new Thread(this).start();
         for(int i = 0; i < MAXPLAYER; i++){
@@ -595,7 +595,7 @@ public class Board extends JPanel implements Runnable{
         buildWorld(g);
     }
 
-    /*class TAdapter extends KeyAdapter {
+    class TAdapter extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -608,7 +608,7 @@ public class Board extends JPanel implements Runnable{
             int key = e.getKeyCode();
 
 
-            if (key == KeyEvent.VK_LEFT) {
+            /*if (key == KeyEvent.VK_LEFT) {
                 if (checkWallCollision(soko, LEFT_COLLISION)) {
                     return;
                 }
@@ -638,13 +638,13 @@ public class Board extends JPanel implements Runnable{
 
                 soko.move(0, SPACE, "d", 0);
 
-            } else if (key == KeyEvent.VK_R) {
+            }*/ if (key == KeyEvent.VK_R) {
                 restartLevel();
             }
 
-            repaint();
+            //repaint();
         }
-    }*/
+    }
     
     synchronized static boolean movePlayer(int PID,String team, String direction){
         try{
@@ -1210,6 +1210,7 @@ public class Board extends JPanel implements Runnable{
         walls.clear();
         areac.clear();
         grs.clear();
+        tende.clear();
         initWorld();
         for(int i = 0; i < thiefs.size(); i++){
             try{
