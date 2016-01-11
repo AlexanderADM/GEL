@@ -98,7 +98,7 @@ public class ClientThread implements Runnable{
                     Thread.currentThread().interrupt();
                     Thread.sleep(2000);
                 }               
-                while(System.currentTimeMillis() - 40 > time){
+                while(System.currentTimeMillis() - 10 > time){
                     if(!Board.movePlayer(PID, squad, cmd)){
                         pw.println("disconnect");
                         pw.flush();

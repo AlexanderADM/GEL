@@ -28,6 +28,8 @@ public class Board extends JPanel implements Runnable{
     public static final int MAXPLAYER = 9;
     private static ArrayList id_thiefs = new ArrayList();
     private static ArrayList id_cops = new ArrayList();
+    private static String lastSafe = "";
+    private static String oldestCop = "";
     //private static Thief soko;
     private int w = 0;
     private int h = 0;
@@ -593,6 +595,29 @@ public class Board extends JPanel implements Runnable{
     public void paint(Graphics g) {
         super.paint(g);
         buildWorld(g);
+        if(!lastSafe.isEmpty() && !oldestCop.isEmpty()) {
+            if(lastSafe.equals("0")){
+                g.setColor(new Color(255, 0, 0));
+            }else if(lastSafe.equals("1")){
+                g.setColor(new Color(255, 125, 10));
+            }else if(lastSafe.equals("2")){
+                g.setColor(new Color(248, 255, 0));
+            }else if(lastSafe.equals("3")){
+                g.setColor(new Color(16, 255, 0));
+            }else if(lastSafe.equals("4")){
+                g.setColor(new Color(0, 255, 240));
+            }else if(lastSafe.equals("5")){
+                g.setColor(new Color(37, 148, 255));
+            }else if(lastSafe.equals("6")){
+                g.setColor(new Color(0, 4, 255));
+            }else if(lastSafe.equals("7")){
+                g.setColor(new Color(89, 0, 174));
+            }else if(lastSafe.equals("8")){
+                g.setColor(new Color(255, 17, 202));
+            }
+
+            g.drawString("Thief " + lastSafe + " got away, Cop " + oldestCop + " was kicked out.", 25, 20);
+        }
     }
 
     class TAdapter extends KeyAdapter {
@@ -609,28 +634,6 @@ public class Board extends JPanel implements Runnable{
 
 
             /*if (key == KeyEvent.VK_LEFT) {
-                if (checkWallCollision(soko, LEFT_COLLISION)) {
-                    return;
-                }
-                soko.move(-SPACE, 0, "l", 0);
-
-            } else if (key == KeyEvent.VK_RIGHT) {
-
-                if (checkWallCollision(soko, RIGHT_COLLISION)) {
-                    return;
-                }
-
-                soko.move(SPACE, 0, "r", 0);
-
-            } else if (key == KeyEvent.VK_UP) {
-
-                if (checkWallCollision(soko, TOP_COLLISION)) {
-                    return;
-                }
-
-                soko.move(0, -SPACE, "u", 0);
-
-            } else if (key == KeyEvent.VK_DOWN) {
 
                 if (checkWallCollision(soko, BOTTOM_COLLISION)) {
                     return;
@@ -762,10 +765,17 @@ public class Board extends JPanel implements Runnable{
             zone = (Area) areas.get(i);
             if(zone.x() == th.x() && zone.y() == th.y()){
                 System.err.println("Thief ID: " + PID + " is in the safe zone.");
+                gotAway(PID, "ladri");
                 releaseID(PID, "ladri");
                 randomSpawn(PID, "ladri");
                 kickCop();
             }
+        }
+    }
+    synchronized static void gotAway(int PID, String team){
+        if(team.equalsIgnoreCase("ladri")){
+            System.err.println("Thief " + PID + "  " + " got away.");
+            lastSafe = "" + PID;
         }
     }
     public static void kickCop(){
@@ -790,6 +800,7 @@ public class Board extends JPanel implements Runnable{
             }
         }
         if(check == true) {
+            oldestCop = "" + PID;
             releaseID(PID, "guardie");
         }
     }
