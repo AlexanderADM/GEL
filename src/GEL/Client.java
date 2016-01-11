@@ -130,7 +130,7 @@ public class Client extends javax.swing.JFrame{
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
                 } else {                    
-                    con = new Socket("127.0.0.1", 12345);
+                    con = new Socket("192.168.0.239", 12345);
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
                     if (Guardia.isSelected()) {
