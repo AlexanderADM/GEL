@@ -15,30 +15,36 @@ public class Thief extends Actor {
         this.setImage(image);
     }
 
-    public void move(int x, int y, String cmd, int PID) {
-        if(cmd.equals("l")){
-            URL loc = this.getClass().getResource("\\res\\player" + PID + "_l.png");
-            ImageIcon iia = new ImageIcon(loc);
-            Image image = iia.getImage();
-            this.setImage(image);
-        }
-        else if(cmd.equals("r")){
-            URL loc = this.getClass().getResource("\\res\\player" + PID + "_r.png");
-            ImageIcon iia = new ImageIcon(loc);
-            Image image = iia.getImage();
-            this.setImage(image);
-        }
-        else if(cmd.equals("u")){
-            URL loc = this.getClass().getResource("\\res\\player" + PID + "_u.png");
-            ImageIcon iia = new ImageIcon(loc);
-            Image image = iia.getImage();
-            this.setImage(image);
-        }
-        else if(cmd.equals("d")){
-            URL loc = this.getClass().getResource("\\res\\player" + PID + "_d.png");
-            ImageIcon iia = new ImageIcon(loc);
-            Image image = iia.getImage();
-            this.setImage(image);
+    void move(int x, int y, String cmd, int PID) {
+        switch (cmd) {
+            case "l": {
+                URL loc = this.getClass().getResource("\\res\\player" + PID + "_l.png");
+                ImageIcon iia = new ImageIcon(loc);
+                Image image = iia.getImage();
+                this.setImage(image);
+                break;
+            }
+            case "r": {
+                URL loc = this.getClass().getResource("\\res\\player" + PID + "_r.png");
+                ImageIcon iia = new ImageIcon(loc);
+                Image image = iia.getImage();
+                this.setImage(image);
+                break;
+            }
+            case "u": {
+                URL loc = this.getClass().getResource("\\res\\player" + PID + "_u.png");
+                ImageIcon iia = new ImageIcon(loc);
+                Image image = iia.getImage();
+                this.setImage(image);
+                break;
+            }
+            case "d": {
+                URL loc = this.getClass().getResource("\\res\\player" + PID + "_d.png");
+                ImageIcon iia = new ImageIcon(loc);
+                Image image = iia.getImage();
+                this.setImage(image);
+                break;
+            }
         }
         int nx = this.x() + x;
         int ny = this.y() + y;

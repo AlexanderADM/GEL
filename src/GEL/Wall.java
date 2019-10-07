@@ -4,12 +4,11 @@ import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
-public class Wall extends Actor {
+class Wall extends Actor {
 
-    private Image image;
-
-    public Wall(int x, int y, String type) {
+    Wall(int x, int y, String type) {
         super(x, y);
+        Image image;
         if(type.equalsIgnoreCase("wall")) {
             URL loc = this.getClass().getResource("\\res\\wall.png");
             ImageIcon iia = new ImageIcon(loc);

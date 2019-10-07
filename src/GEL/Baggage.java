@@ -4,9 +4,9 @@ import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
-public class Baggage extends Actor {
+class Baggage extends Actor {
 
-    public Baggage(int x, int y) {
+    Baggage(int x, int y) {
         super(x, y);
         URL loc = this.getClass().getResource("\\res\\baggage.png");
         ImageIcon iia = new ImageIcon(loc);
@@ -14,7 +14,7 @@ public class Baggage extends Actor {
         this.setImage(image);
     }
 
-    public void move(int x, int y) {
+    void move(int x, int y) {
         int nx = this.x() + x;
         int ny = this.y() + y;
         this.setX(nx);

@@ -1,78 +1,65 @@
 package GEL;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.Socket;
 
 public class Client extends javax.swing.JFrame{
-    Socket con;
-    BufferedReader br;
-    PrintWriter pw;
+    private Socket con;
+    private BufferedReader br;
+    private PrintWriter pw;
 
-    checkServer r = new checkServer();
-    Thread check;
-    
-    private static boolean completed = false;
-    
-    
+    private checkServer r = new checkServer();
+    private Thread check;
+
+
     public Client() {
         initComponents();
         setResizable(false);
         Play.setEnabled(false);
         Play.addKeyListener(new TAdapter());        
         setFocusable(true);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);        
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     }
 
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        ButtonGroup buttonGroup1 = new ButtonGroup();
         Guardia = new javax.swing.JRadioButton();
         Ladro = new javax.swing.JRadioButton();
         name = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        Title = new javax.swing.JLabel();
+        JLabel jLabel1 = new JLabel();
+        JLabel title = new JLabel();
         Play = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
+                formKeyPressed();
             }
         });
 
         buttonGroup1.add(Guardia);
         Guardia.setText("Guardia");
-        Guardia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GuardiaActionPerformed(evt);
-            }
-        });
+        Guardia.addActionListener(this::GuardiaActionPerformed);
 
         buttonGroup1.add(Ladro);
         Ladro.setText("Ladro");
-        Ladro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LadroActionPerformed(evt);
-            }
-        });
+        Ladro.addActionListener(this::LadroActionPerformed);
 
         jLabel1.setText("Nome");
 
-        Title.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Title.setText("Guardie e Ladri");
-        Title.setToolTipText("");
+        title.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+        title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        title.setText("Guardie e Ladri");
+        title.setToolTipText("");
 
         Play.setText("Gioca");
-        Play.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PlayActionPerformed(evt);
-            }
-        });
+        Play.addActionListener(this::PlayActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,7 +68,7 @@ public class Client extends javax.swing.JFrame{
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Guardia)
                         .addGap(10, 10, 10)
@@ -98,7 +85,7 @@ public class Client extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Title)
+                .addComponent(title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -130,7 +117,7 @@ public class Client extends javax.swing.JFrame{
                     Ladro.setEnabled(true);
                     name.setEnabled(true);
                 } else {                    
-                    con = new Socket("192.168.0.239", 12345);
+                    con = new Socket("127.0.0.1", 12345);
                     br = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     pw = new PrintWriter(con.getOutputStream());
                     if (Guardia.isSelected()) {
@@ -174,11 +161,11 @@ public class Client extends javax.swing.JFrame{
         Play.setEnabled(true);
     }//GEN-LAST:event_LadroActionPerformed
 
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+    private void formKeyPressed() {//GEN-FIRST:event_formKeyPressed
         
     }//GEN-LAST:event_formKeyPressed
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -191,23 +178,13 @@ public class Client extends javax.swing.JFrame{
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Client.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Client.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Client.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Client.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {                
-                new Client().setVisible(true);
-            }
-        });
+        java.awt.EventQueue.invokeLater(() -> new Client().setVisible(true));
     }
 
     public class checkServer implements Runnable{
@@ -226,8 +203,7 @@ public class Client extends javax.swing.JFrame{
                     check.interrupt();
                     Thread.sleep(2000);
                 }
-            } catch (InterruptedException e) {
-            } catch(IOException e) {
+            } catch (InterruptedException | IOException ignored) {
             }
         }
     }
@@ -236,11 +212,7 @@ public class Client extends javax.swing.JFrame{
         
         @Override
         public void keyPressed (KeyEvent e) {
-            
-            if (completed) {
-                return;
-            }
-            
+
             int key = e.getKeyCode();
             if (key == KeyEvent.VK_LEFT) {
                 pw.println("a");
@@ -265,9 +237,6 @@ public class Client extends javax.swing.JFrame{
     private javax.swing.JRadioButton Guardia;
     private javax.swing.JRadioButton Ladro;
     private javax.swing.JButton Play;
-    private javax.swing.JLabel Title;
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField name;
     // End of variables declaration//GEN-END:variables
 }

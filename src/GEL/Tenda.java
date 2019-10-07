@@ -4,12 +4,11 @@ import java.awt.Image;
 import java.net.URL;
 import javax.swing.ImageIcon;
 
-public class Tenda extends Actor {
+class Tenda extends Actor {
 
-    private Image image;
-
-    public Tenda(int x, int y, String type) {
+    Tenda(int x, int y, String type) {
         super(x, y);
+        Image image;
         if(type.equalsIgnoreCase("tenda4")){
             URL loc = this.getClass().getResource("\\res\\tenda4.png");
             ImageIcon iia = new ImageIcon(loc);

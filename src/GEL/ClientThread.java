@@ -7,12 +7,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientThread implements Runnable{
-    //Declaring variable for the connection.
-    BufferedReader br;
-    PrintWriter pw;
-    Socket s;
-    String squad,name,cmd;
-    int PID; // Unique ID per player
+    private Socket s;
+    private int PID; // Unique ID per player
     // Starting Client Thread
     public ClientThread(Socket conn){
         s = conn;
@@ -25,17 +21,18 @@ public class ClientThread implements Runnable{
     // Getting client Username
     public void run(){
         try {
-            br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            pw = new PrintWriter(s.getOutputStream());
+            //Declaring variable for the connection.
+            BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            PrintWriter pw = new PrintWriter(s.getOutputStream());
             System.err.println("Connection from: " + s);
             System.err.println("Connection established - initialized I/O methods");
             System.err.println("Waiting for client to select squad.");
-            System.err.println("Ladri squad has " + Board.thiefs.size() + " players");
+            System.err.println("Ladri squad has " + Board.thieves.size() + " players");
             System.err.println("Cops squad has  " + Board.cops.size()   + " players");
             System.out.println("" + System.currentTimeMillis());
-            squad = br.readLine();            
+            String squad = br.readLine();
             
-            if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount() == true){
+            if(squad.equalsIgnoreCase("ladri") && Board.getThiefCount()){
                 PID = Board.getEmptyID(squad);
                 if(PID == 9){
                     System.err.println("Client Thread from: " + s);
@@ -53,7 +50,7 @@ public class ClientThread implements Runnable{
                     pw.println("ok");
                     pw.flush();
                 }
-            }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount() == true){
+            }else if(squad.equalsIgnoreCase("guardie") && Board.getCopCount()){
                 PID = Board.getEmptyID(squad);
 
                 if(PID == 9){
@@ -83,15 +80,15 @@ public class ClientThread implements Runnable{
 
             System.err.println("Client selected squad : " + squad);
             System.err.println("Waiting for client username: ");
-            
-            name = br.readLine();
+
+            //String name = br.readLine();
             Board.randomSpawn(PID, squad);
             long time = System.currentTimeMillis();
             while(true){
-                cmd = br.readLine();
+                String cmd = br.readLine();
                 
                 if(cmd == null || cmd.equalsIgnoreCase("exit")){
-                    Board.releaseID(PID,squad);
+                    Board.releaseID(PID, squad);
                     pw.close();
                     br.close();
                     s.close();
@@ -110,9 +107,7 @@ public class ClientThread implements Runnable{
                     time = System.currentTimeMillis();
                 }
             }
-        }catch(IOException e){
-            System.err.println(e);
-        } catch (InterruptedException e) {
+        }catch(IOException | InterruptedException e){
             e.printStackTrace();
         }
     }

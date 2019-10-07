@@ -1,5 +1,8 @@
 package GEL;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
@@ -8,91 +11,70 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.JPanel;
 
-public class Board extends JPanel implements Runnable{ 
+public class Board extends JPanel implements Runnable{
 
-    private final int OFFSET = 30;
     private static final int SPACE = 20;
     private static final int LEFT_COLLISION = 1;
-    private static final int RIGHT_COLLISION = 2;
+    private static final int RIGHT_COLLISION;
+
+    static {
+        RIGHT_COLLISION = 2;
+    }
+
     private static final int TOP_COLLISION = 3;
     private static final int BOTTOM_COLLISION = 4;
-    private static Random ran = new Random();
-    private static ArrayList walls = new ArrayList();
-    private static ArrayList grs = new ArrayList();
-    private static ArrayList tende = new ArrayList();
-    private static ArrayList baggs = new ArrayList();
-    private static ArrayList areas = new ArrayList();
-    private static ArrayList areac = new ArrayList();
-    protected static ArrayList thiefs = new ArrayList();
-    protected static ArrayList cops = new ArrayList();
-    public static final int MAXPLAYER = 9;
-    private static ArrayList id_thiefs = new ArrayList();
-    private static ArrayList id_cops = new ArrayList();
+    private static final Random ran = new Random();
+    private static final ArrayList<Wall> walls = new ArrayList<Wall>();
+    private static final ArrayList<Grass> grs = new ArrayList<Grass>();
+    private static final ArrayList<Tenda> tent = new ArrayList<Tenda>();
+    private static final ArrayList<Baggage> bags = new ArrayList<Baggage>();
+    private static final ArrayList<Area> areas = new ArrayList<Area>();
+    private static final ArrayList<AreaC> areac = new ArrayList<AreaC>();
+    static final ArrayList<Thief> thieves = new ArrayList<Thief>();
+    static final ArrayList<Cop> cops = new ArrayList<Cop>();
+    private static final int maxPlayers = 9;
+    private static final ArrayList<Boolean> id_thieves = new ArrayList<>();
+    private static final ArrayList<Boolean> id_cops;
+
+    static {
+        id_cops = new ArrayList<>();
+    }
+
     private static String lastSafe = "";
     private static String oldestCop = "";
     //private static Thief soko;
     private int w = 0;
     private int h = 0;
     private static boolean completed = false;
-    private static String level =
-                      "<=====================================================>\n"
-                    + "[£££££££[?????????????????????????????????????????????[\n"
-                    + "[£££££££[??<====>--<====>???QWWWWE??***--***??tyyyu???[\n"
-                    + "[£££££££[??[-^^-*--*-^^-[???ASSSSD??*--^-^-*??ghhhj???[\n"
-                    + "[£££££££[??{*****--*****}???ZXXXXC??***^-***??bnnnm???[\n"
-                    + "[£££££££[??----------^---???assssd????????????????????[\n"
-                    + "[$$$$===}??--^------^^---???a`ss`d??tyyyu??QWWWWWWE???[\n"
-                    + "[????****??<*****--*****>???zxxxxc??ghhhj??ZXXXXXXC???[\n"
-                    + "[????*^^*??[-^^-*--*-^^-[???????????bnnnm??bnnnnnnm???[\n"
-                    + "[????****??{====}--{====}??QWE??QWE???????????????????[\n"
-                    + "[??????????????????????????ZXC??ZXC???????????????????[\n"
-                    + "[??????????????????????????a`d??a`d???????????????????[\n"
-                    + "[????70&&&&¬9??70&&&&¬9????zxc??zxc??????????????<=$$=[\n"
-                    + "[????4èòòòòà6??4èòòòòà6??????????????????????????[....[\n"
-                    + "[????12222223??12222223????IOOOOOOP??????????????[....[\n"
-                    + "[??????????????????????????J++++++L??↕‼¶§§§¶▬↑???$....[\n"
-                    + "[??????????????????????????J++++++L??♪♫☼☼☼☼☼►◄???$....[\n"
-                    + "[????ÕÌÌÌÌÌÌÖ??ÕÌÌÌÌÌÌÖ????J++++++L??○◙▲Å©®▲♂♀???$....[\n"
-                    + "[????ÑÁÁÁÁÁÁÿ??ÑÁÁÁÁÁÁÿ????BNNNNNNM??_••¡¢¤••◘???[....[\n"
-                    + "[????12222223??12222223??????????????????????????[....[\n"
-                    + "[??????????????????????????QWE??QWE??????????????{=$$=[\n"
-                    + "[??????????????????????????ZXC??ZXC???????????????????[\n"
-                    + "[????****??<============>??a`d??a`d??789ÕÌÖ??ÕÌÖ789???[\n"
-                    + "[????*^^*??[--^^--^--^--[??zxc??zxc??456ÑÁÿ??ÑÁÿ456???[\n"
-                    + "[????****??{============}????????????123123??123123???[\n"
-                    + "[$$$$===>???????????????????<====>????????????????????[\n"
-                    + "[£££££££[???????????????????[-^^-[????????????????????[\n"
-                    + "[£££££££[??<============>???[--^-[???789ÕÌÖ??ÕÌÖ789???[\n"
-                    + "[£££££££[??[--^---^^----[???[-^--[???456ÑÁÿ??ÑÁÿ456???[\n"
-                    + "[£££££££[??{============}???{====}???123123??123123???[\n"
-                    + "[£££££££[?????????????????????????????????????????????[\n"
-                    + "{=====================================================}\n";
 
     public Board() {
         addKeyListener(new TAdapter());
         setFocusable(true);
         initWorld();
         new Thread(this).start();
-        for(int i = 0; i < MAXPLAYER; i++){
-            id_thiefs.add(i, true);
+        for(int i = 0; i < maxPlayers; i++){
+            id_thieves.add(i, true);
             id_cops.add(i, true);
         }
     }
 
-    public int getBoardWidth() {
+    int getBoardWidth() {
         return this.w;
     }
-    public int getBoardHeight() {
+    int getBoardHeight() {
         return this.h;
     }
+    @Contract(pure = true)
     synchronized static boolean getThiefCount(){
-        return id_thiefs.contains(true);
+        return id_thieves.contains(true);
     }
+    @Contract(pure = true)
     synchronized static boolean getCopCount(){
         return id_cops.contains(true);
     }
-    public final void initWorld() {
-        
+    private void initWorld() {
+
+        int OFFSET = 30;
         int x = OFFSET;
         int y = OFFSET;
         
@@ -106,6 +88,38 @@ public class Board extends JPanel implements Runnable{
         Thief d;
 
 
+        String level = "<=====================================================>\n"
+                + "[£££££££[?????????????????????????????????????????????[\n"
+                + "[£££££££[??<====>--<====>???QWWWWE??***--***??tyyyu???[\n"
+                + "[£££££££[??[-^^-*--*-^^-[???ASSSSD??*--^-^-*??ghhhj???[\n"
+                + "[£££££££[??{*****--*****}???ZXXXXC??***^-***??bnnnm???[\n"
+                + "[£££££££[??----------^---???assssd????????????????????[\n"
+                + "[$$$$===}??--^------^^---???a`ss`d??tyyyu??QWWWWWWE???[\n"
+                + "[????****??<*****--*****>???zxxxxc??ghhhj??ZXXXXXXC???[\n"
+                + "[????*^^*??[-^^-*--*-^^-[???????????bnnnm??bnnnnnnm???[\n"
+                + "[????****??{====}--{====}??QWE??QWE???????????????????[\n"
+                + "[??????????????????????????ZXC??ZXC???????????????????[\n"
+                + "[??????????????????????????a`d??a`d???????????????????[\n"
+                + "[????70&&&&¬9??70&&&&¬9????zxc??zxc??????????????<=$$=[\n"
+                + "[????4èòòòòà6??4èòòòòà6??????????????????????????[....[\n"
+                + "[????12222223??12222223????IOOOOOOP??????????????[....[\n"
+                + "[??????????????????????????J++++++L??↕‼¶§§§¶▬↑???$....[\n"
+                + "[??????????????????????????J++++++L??♪♫☼☼☼☼☼►◄???$....[\n"
+                + "[????ÕÌÌÌÌÌÌÖ??ÕÌÌÌÌÌÌÖ????J++++++L??○◙▲Å©®▲♂♀???$....[\n"
+                + "[????ÑÁÁÁÁÁÁÿ??ÑÁÁÁÁÁÁÿ????BNNNNNNM??_••¡¢¤••◘???[....[\n"
+                + "[????12222223??12222223??????????????????????????[....[\n"
+                + "[??????????????????????????QWE??QWE??????????????{=$$=[\n"
+                + "[??????????????????????????ZXC??ZXC???????????????????[\n"
+                + "[????****??<============>??a`d??a`d??789ÕÌÖ??ÕÌÖ789???[\n"
+                + "[????*^^*??[--^^--^--^--[??zxc??zxc??456ÑÁÿ??ÑÁÿ456???[\n"
+                + "[????****??{============}????????????123123??123123???[\n"
+                + "[$$$$===>???????????????????<====>????????????????????[\n"
+                + "[£££££££[???????????????????[-^^-[????????????????????[\n"
+                + "[£££££££[??<============>???[--^-[???789ÕÌÖ??ÕÌÖ789???[\n"
+                + "[£££££££[??[--^---^^----[???[-^--[???456ÑÁÿ??ÑÁÿ456???[\n"
+                + "[£££££££[??{============}???{====}???123123??123123???[\n"
+                + "[£££££££[?????????????????????????????????????????????[\n"
+                + "{=====================================================}\n";
         for (int i = 0; i < level.length(); i++) {
 
             char item = level.charAt(i);
@@ -154,7 +168,7 @@ public class Board extends JPanel implements Runnable{
                 x += SPACE;
             } else if (item == '$') {
                 b = new Baggage(x, y);
-                baggs.add(b);
+                bags.add(b);
                 x += SPACE;
             } else if (item == '.') {
                 a = new Area(x, y);
@@ -167,7 +181,7 @@ public class Board extends JPanel implements Runnable{
             } else if (item == '@') {
                 //soko = new Thief(x, y, 0);
                 d = new Thief(x, y, 0);
-                thiefs.add(d);
+                thieves.add(d);
                 x += SPACE;
             }else if  (item == '%'){
                 c = new Cop(x, y, 0);
@@ -333,80 +347,80 @@ public class Board extends JPanel implements Runnable{
                 x += SPACE;
             }else if (item == '4') {
                 tenda = new Tenda(x, y,"tenda4");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '5') {
                 tenda = new Tenda(x, y,"tenda5");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '6') {
                 tenda = new Tenda(x, y,"tenda6");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '7') {
                 tenda = new Tenda(x, y,"tenda7");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '8') {
                 tenda = new Tenda(x, y,"tenda8");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '9') {
                 tenda = new Tenda(x, y,"tenda9");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '0') {
                 tenda = new Tenda(x, y,"tenda0");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '&') {
                 tenda = new Tenda(x, y,"tenda11");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '¬') {
                 tenda = new Tenda(x, y,"tenda12");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'è') {
                 tenda = new Tenda(x, y,"tenda13");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'ò') {
                 tenda = new Tenda(x, y,"tenda14");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'à') {
                 tenda = new Tenda(x, y,"tenda15");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Ñ') {
                 tenda = new Tenda(x, y,"tendina1");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Á') {
                 tenda = new Tenda(x, y,"tendina2");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'ÿ') {
                 tenda = new Tenda(x, y,"tendina3");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Õ') {
                 tenda = new Tenda(x, y,"tendina4");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Ì') {
                 tenda = new Tenda(x, y,"tendina5");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Ö') {
                 tenda = new Tenda(x, y,"tendina6");
-                tende.add(tenda);
+                tent.add(tenda);
                 x += SPACE;
             }else if (item == '^') {
                 grass = new Grass(x, y, "fiorellino");
                 grs.add(grass);
-                x += SPACE;;
+                x += SPACE;
             }else if (item == '_') {
                 wall = new Wall(x, y, "pala1");
                 walls.add(wall);
@@ -514,73 +528,27 @@ public class Board extends JPanel implements Runnable{
         }
     }
 
-    public void buildWorld(Graphics g) {
+    private void buildWorld(@NotNull Graphics g) {
         g.setColor(new Color(77, 109, 46));
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        boolean chk;
 
-        ArrayList world = new ArrayList();
+        ArrayList<Actor> world = new ArrayList<Actor>();
         world.addAll(areas);
         world.addAll(areac);
-        world.addAll(grs);        
-        
-        int c = 0;
-        while(true){
-            try{
-                cops.get(c);
-                try{
-                    chk = (boolean)cops.get(c);
-                }
-                catch(ClassCastException e){
-                    chk = true;
-                }
-                if(chk == false){
-                } else{
-                    world.add((Cop)cops.get(c));
-                }
-            }
-            catch(IndexOutOfBoundsException e){
-                break;
-            }
-            c++;
-        }
-        
-        int t = 0;
-        while(true){
-            try{
-                thiefs.get(t);
-                try{
-                    chk = (boolean)thiefs.get(t);
-                }
-                catch(ClassCastException e){
-                    chk = true;
-                }
-                if(chk == false){
-                } else{
-                    world.add((Thief)thiefs.get(t));
-                }
-            }
-            catch(IndexOutOfBoundsException e){
-                break;
-            }
-            t++;
-        }
-        
+        world.addAll(grs);
+        world.addAll(cops);
+        world.addAll(thieves);
         //world.add(soko);
-        
-        world.addAll(baggs);
-        world.addAll(tende);
+        world.addAll(bags);
+        world.addAll(tent);
         world.addAll(walls);
 
-        for (int i = 0; i < world.size(); i++) {
+        for (Actor o : world) {
 
-            Actor item = (Actor) world.get(i);
-
-            if ((item instanceof Thief)
-                    || (item instanceof Baggage)) {
-                g.drawImage(item.getImage(), item.x(), item.y(), this);
+            if ((o instanceof Thief) || (o instanceof Baggage)) {
+                g.drawImage(o.getImage(), o.x(), o.y(), this);
             } else {
-                g.drawImage(item.getImage(), item.x(), item.y(), this);
+                g.drawImage(o.getImage(), o.x(), o.y(), this);
             }
 
             if (completed) {
@@ -596,24 +564,34 @@ public class Board extends JPanel implements Runnable{
         super.paint(g);
         buildWorld(g);
         if(!lastSafe.isEmpty() && !oldestCop.isEmpty()) {
-            if(lastSafe.equals("0")){
-                g.setColor(new Color(255, 0, 0));
-            }else if(lastSafe.equals("1")){
-                g.setColor(new Color(255, 125, 10));
-            }else if(lastSafe.equals("2")){
-                g.setColor(new Color(248, 255, 0));
-            }else if(lastSafe.equals("3")){
-                g.setColor(new Color(16, 255, 0));
-            }else if(lastSafe.equals("4")){
-                g.setColor(new Color(0, 255, 240));
-            }else if(lastSafe.equals("5")){
-                g.setColor(new Color(37, 148, 255));
-            }else if(lastSafe.equals("6")){
-                g.setColor(new Color(0, 4, 255));
-            }else if(lastSafe.equals("7")){
-                g.setColor(new Color(89, 0, 174));
-            }else if(lastSafe.equals("8")){
-                g.setColor(new Color(255, 17, 202));
+            switch (lastSafe) {
+                case "0":
+                    g.setColor(new Color(255, 0, 0));
+                    break;
+                case "1":
+                    g.setColor(new Color(255, 125, 10));
+                    break;
+                case "2":
+                    g.setColor(new Color(248, 255, 0));
+                    break;
+                case "3":
+                    g.setColor(new Color(16, 255, 0));
+                    break;
+                case "4":
+                    g.setColor(new Color(0, 255, 240));
+                    break;
+                case "5":
+                    g.setColor(new Color(37, 148, 255));
+                    break;
+                case "6":
+                    g.setColor(new Color(0, 4, 255));
+                    break;
+                case "7":
+                    g.setColor(new Color(89, 0, 174));
+                    break;
+                case "8":
+                    g.setColor(new Color(255, 17, 202));
+                    break;
             }
 
             g.drawString("Thief " + lastSafe + " got away, Cop " + oldestCop + " was kicked out.", 25, 20);
@@ -649,12 +627,12 @@ public class Board extends JPanel implements Runnable{
         }
     }
     
-    synchronized static boolean movePlayer(int PID,String team, String direction){
+    synchronized static boolean movePlayer(int PID, @NotNull String team, String direction){
         try{
             if(team.equalsIgnoreCase("ladri")) {
+                Thief thief = thieves.get(PID);
                 if (direction.equalsIgnoreCase("W")) {
-                    Thief thieves = (Thief) thiefs.get(PID);
-                    if (checkWallCollision(thieves, TOP_COLLISION)) {
+                    if (checkWallCollision(thief, TOP_COLLISION)) {
                         return true;
                     }
                     if (checkBagCollision(PID, team, TOP_COLLISION)) {
@@ -663,10 +641,9 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
                         return false;
                     }
-                    thieves.move(0, -SPACE, "u", PID);
+                    thief.move(0, -SPACE, "u", PID);
                 } else if (direction.equalsIgnoreCase("S")) {
-                    Thief thieves = (Thief) thiefs.get(PID);
-                    if (checkWallCollision(thieves, BOTTOM_COLLISION)) {
+                    if (checkWallCollision(thief, BOTTOM_COLLISION)) {
                         return true;
                     }
                     if (checkBagCollision(PID, team, BOTTOM_COLLISION)) {
@@ -675,10 +652,9 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
                         return false;
                     }
-                    thieves.move(0, SPACE, "d", PID);
+                    thief.move(0, SPACE, "d", PID);
                 } else if (direction.equalsIgnoreCase("A")) {
-                    Thief thieves = (Thief) thiefs.get(PID);
-                    if (checkWallCollision(thieves, LEFT_COLLISION)) {
+                    if (checkWallCollision(thief, LEFT_COLLISION)) {
                         return true;
                     }
                     if (checkBagCollision(PID, team, LEFT_COLLISION)) {
@@ -687,10 +663,9 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
                         return false;
                     }
-                    thieves.move(-SPACE, 0, "l", PID);
+                    thief.move(-SPACE, 0, "l", PID);
                 } else if (direction.equalsIgnoreCase("D")) {
-                    Thief thieves = (Thief) thiefs.get(PID);
-                    if (checkWallCollision(thieves, RIGHT_COLLISION)) {
+                    if (checkWallCollision(thief, RIGHT_COLLISION)) {
                         return true;
                     }
                     if (checkBagCollision(PID, team, RIGHT_COLLISION)) {
@@ -699,12 +674,12 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
                         return false;
                     }
-                    thieves.move(SPACE, 0, "r", PID);
+                    thief.move(SPACE, 0, "r", PID);
                 }
                 isSafe(PID);
             }else if(team.equalsIgnoreCase("guardie")){
+                Cop cp = cops.get(PID);
                 if (direction.equalsIgnoreCase("W")) {
-                    Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, TOP_COLLISION)) {
                         return true;
                     }
@@ -716,7 +691,6 @@ public class Board extends JPanel implements Runnable{
                     }
                     cp.move(0, -SPACE, "u", PID);
                 } else if (direction.equalsIgnoreCase("S")) {
-                    Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, BOTTOM_COLLISION)) {
                         return true;
                     }
@@ -728,7 +702,6 @@ public class Board extends JPanel implements Runnable{
                     }
                     cp.move(0, SPACE, "d", PID);
                 } else if (direction.equalsIgnoreCase("A")) {
-                    Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, LEFT_COLLISION)) {
                         return true;
                     }
@@ -740,7 +713,6 @@ public class Board extends JPanel implements Runnable{
                     }
                     cp.move(-SPACE, 0, "l", PID);
                 } else if (direction.equalsIgnoreCase("D")) {
-                    Cop cp = (Cop) cops.get(PID);
                     if (checkWallCollision(cp, RIGHT_COLLISION)) {
                         return true;
                     }
@@ -759,26 +731,24 @@ public class Board extends JPanel implements Runnable{
         return true;
     }
     private static void isSafe(int PID){
-        Thief th = (Thief) thiefs.get(PID);
+        Thief th = thieves.get(PID);
         Area zone;
-        for (int i = 0; i < areas.size(); i++) {
-            zone = (Area) areas.get(i);
-            if(zone.x() == th.x() && zone.y() == th.y()){
+        for (Area area : areas) {
+            zone = area;
+            if (zone.x() == th.x() && zone.y() == th.y()) {
                 System.err.println("Thief ID: " + PID + " is in the safe zone.");
-                gotAway(PID, "ladri");
+                gotAway(PID);
                 releaseID(PID, "ladri");
                 randomSpawn(PID, "ladri");
                 kickCop();
             }
         }
     }
-    synchronized static void gotAway(int PID, String team){
-        if(team.equalsIgnoreCase("ladri")){
+    private synchronized static void gotAway(int PID){
             System.err.println("Thief " + PID + "  " + " got away.");
             lastSafe = "" + PID;
-        }
     }
-    public static void kickCop(){
+    private static void kickCop(){
 
         long timeNew;
         long timeOld = System.currentTimeMillis();
@@ -788,123 +758,119 @@ public class Board extends JPanel implements Runnable{
         if(cops.size() != 0) {
             for (int i = 0; i < cops.size(); i++) {
                 try{
-                    p =  (Cop) cops.get(i);
+                    p = cops.get(i);
                     timeNew = p.time;
                     if(timeNew < timeOld){
                         timeOld = timeNew;
                         PID = i;
                         check = true;
                     }
-                }catch(ClassCastException e ){
+                }catch(ClassCastException ignored){
                 }
             }
         }
-        if(check == true) {
+        if(check) {
             oldestCop = "" + PID;
             releaseID(PID, "guardie");
         }
     }
-    private static boolean checkPlayerCollision(int PID, String team, int type){
+    private static boolean checkPlayerCollision(int PID, @NotNull String team, int type){
         if(team.equalsIgnoreCase("ladri")) {
-            Thief th = (Thief) thiefs.get(PID);
+            Thief th = thieves.get(PID);
             if (type == LEFT_COLLISION) {
-                for (int i = 0; i < cops.size(); i++) {
-                    try{
-                        Cop cop = (Cop) cops.get(i);
-                        if (th.isLeftCollision(cop)) {
+                for (Cop o : cops) {
+                    try {
+                        if (th.isLeftCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
                             releaseID(PID, team);
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    } catch (ClassCastException ignored) {
                     }
                 }
                 return false;
             } else if (type == RIGHT_COLLISION) {
-                for (int i = 0; i < cops.size(); i++) {
-                    try{
-                        Cop cop = (Cop) cops.get(i);
-                        if (th.isRightCollision(cop)) {
+                for (Cop o : cops) {
+                    try {
+                        if (th.isRightCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
                             releaseID(PID, team);
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    } catch (ClassCastException ignored) {
                     }
                 }
             } else if (type == TOP_COLLISION) {
-                for (int i = 0; i < cops.size(); i++) {
-                    try{
-                        Cop cop = (Cop) cops.get(i);
-                        if (th.isTopCollision(cop)) {
+                for (Cop o : cops) {
+                    try {
+                        if (th.isTopCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
                             releaseID(PID, team);
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    } catch (ClassCastException ignored) {
                     }
                 }
             } else if (type == BOTTOM_COLLISION) {
-                for (int i = 0; i < cops.size(); i++) {
-                    try{
-                        Cop cop = (Cop) cops.get(i);
-                        if (th.isBottomCollision(cop)) {
+                for (Cop o : cops) {
+                    try {
+                        if (th.isBottomCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
                             releaseID(PID, team);
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    } catch (ClassCastException ignored) {
                     }
                 }
             }
         }else if(team.equalsIgnoreCase("guardie")){
-            Cop cp = (Cop) cops.get(PID);
+            Cop cp = cops.get(PID);
             if(type == BOTTOM_COLLISION){
-                for (int i = 0; i < thiefs.size(); i++) {
+                for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = (Thief) thiefs.get(i);
+                        Thief th = thieves.get(i);
                         if (cp.isBottomCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    }catch(ClassCastException ignored){
                     }
                 }
             }else if(type == TOP_COLLISION){
-                for (int i = 0; i < thiefs.size(); i++) {
+                for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = (Thief) thiefs.get(i);
+                        Thief th = thieves.get(i);
                         if (cp.isTopCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    }catch(ClassCastException ignored){
                     }
                 }
             }else if(type == RIGHT_COLLISION){
-                for (int i = 0; i < thiefs.size(); i++) {
+                for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = (Thief) thiefs.get(i);
+                        Thief th = thieves.get(i);
                         if (cp.isRightCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    }catch(ClassCastException ignored){
                     }
                 }
             }else if(type == LEFT_COLLISION){
-                for (int i = 0; i < thiefs.size(); i++) {
+                for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = (Thief) thiefs.get(i);
+                        Thief th = thieves.get(i);
                         if (cp.isLeftCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
                             return true;
                         }
-                    }catch(ClassCastException e){
+                    }catch(ClassCastException ignored){
                     }
                 }
             }
@@ -912,42 +878,30 @@ public class Board extends JPanel implements Runnable{
         return false;
     }
     private static boolean checkWallCollision(Actor actor, int type) {
-
         if (type == LEFT_COLLISION) {
-
-            for (int i = 0; i < walls.size(); i++) {
-                Wall wall = (Wall) walls.get(i);
-                if (actor.isLeftCollision(wall)) {
+            for (Wall o : walls) {
+                if (actor.isLeftCollision(o)) {
                     return true;
                 }
             }
             return false;
-
         } else if (type == RIGHT_COLLISION) {
-
-            for (int i = 0; i < walls.size(); i++) {
-                Wall wall = (Wall) walls.get(i);
-                if (actor.isRightCollision(wall)) {
+            for (Wall o : walls) {
+                if (actor.isRightCollision(o)) {
                     return true;
                 }
             }
             return false;
-
         } else if (type == TOP_COLLISION) {
-
-            for (int i = 0; i < walls.size(); i++) {
-                Wall wall = (Wall) walls.get(i);
-                if (actor.isTopCollision(wall)) {
+            for (Wall o : walls) {
+                if (actor.isTopCollision(o)) {
                     return true;
                 }
             }
             return false;
-
         } else if (type == BOTTOM_COLLISION) {
-
-            for (int i = 0; i < walls.size(); i++) {
-                Wall wall = (Wall) walls.get(i);
-                if (actor.isBottomCollision(wall)) {
+            for (Wall o : walls) {
+                if (actor.isBottomCollision(o)) {
                     return true;
                 }
             }
@@ -957,282 +911,120 @@ public class Board extends JPanel implements Runnable{
     }
 
     private static boolean checkBagCollision(int PID,String team, int type) {
-        Thief th;
-        Cop cp;
+        Thief th = thieves.get(PID);
+        Cop cp = cops.get(PID);
         if (type == LEFT_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
-                try {
-                    th = (Thief) thiefs.get(PID);
-                    for (int i = 0; i < baggs.size(); i++) {
-
-                        Baggage bag = (Baggage) baggs.get(i);
-
-                        if (th.isLeftCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isLeftCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, LEFT_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(-SPACE, 0);
+                for(Baggage bag : bags){
+                    if(th.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, LEFT_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
-            }else if(team.equalsIgnoreCase("guardie")) {
-                try {
-                    cp = (Cop) cops.get(PID);
-                    for (int j = 0; j < baggs.size(); j++) {
-
-                        Baggage bag = (Baggage) baggs.get(j);
-
-                        if (cp.isLeftCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isLeftCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, LEFT_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(-SPACE, 0);
+            }else{
+                for(Baggage bag : bags){
+                    if(cp.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, LEFT_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
             }
             return false;
-        } else if (type == RIGHT_COLLISION) {
+        }else if (type == RIGHT_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
-                try {
-                    th = (Thief) thiefs.get(PID);
-                    for (int i = 0; i < baggs.size(); i++) {
-
-                        Baggage bag = (Baggage) baggs.get(i);
-
-                        if (th.isRightCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isRightCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, RIGHT_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(SPACE, 0);
+                for(Baggage bag : bags){
+                    if(th.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, RIGHT_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
-            }else if(team.equalsIgnoreCase("guardie")) {
-                try {
-                    cp = (Cop) cops.get(PID);
-                    for (int j = 0; j < baggs.size(); j++) {
-
-                        Baggage bag = (Baggage) baggs.get(j);
-
-                        if (cp.isRightCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isRightCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, RIGHT_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(SPACE, 0);
+            }else{
+                for(Baggage bag : bags){
+                    if(cp.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, RIGHT_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
             }
             return false;
-
         } else if (type == TOP_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
-                try {
-                    th = (Thief) thiefs.get(PID);
-                    for (int i = 0; i < baggs.size(); i++) {
-
-                        Baggage bag = (Baggage) baggs.get(i);
-
-                        if (th.isTopCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isTopCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, TOP_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(0, -SPACE);
+                for(Baggage bag : bags){
+                    if(th.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, TOP_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    // e.printStackTrace();
                 }
-            } else if(team.equalsIgnoreCase("guardie")) {
-                try {
-                    cp = (Cop) cops.get(PID);
-                    for (int j = 0; j < baggs.size(); j++) {
-
-                        Baggage bag = (Baggage) baggs.get(j);
-
-                        if (cp.isTopCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isTopCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, TOP_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(0, -SPACE);
+            }else{
+                for(Baggage bag : bags){
+                    if(cp.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, RIGHT_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
             }
             return false;
-
         } else if (type == BOTTOM_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
-                try {
-                    th = (Thief) thiefs.get(PID);
-                    for (int i = 0; i < baggs.size(); i++) {
-
-                        Baggage bag = (Baggage) baggs.get(i);
-
-                        if (th.isBottomCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isBottomCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, BOTTOM_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(0, SPACE);
+                for(Baggage bag : bags){
+                    if(th.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, BOTTOM_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
-            }else if(team.equalsIgnoreCase("guardie")) {
-                try {
-                    cp = (Cop) cops.get(PID);
-                    for (int j = 0; j < baggs.size(); j++) {
-
-                        Baggage bag = (Baggage) baggs.get(j);
-
-                        if (cp.isBottomCollision(bag)) {
-
-                            for (int y = 0; y < baggs.size(); y++) {
-                                Baggage item = (Baggage) baggs.get(y);
-                                if (!bag.equals(item)) {
-                                    if (bag.isBottomCollision(item)) {
-                                        return true;
-                                    }
-                                }
-                                if (checkWallCollision(bag, BOTTOM_COLLISION)) {
-                                    return true;
-                                }
-                            }
-                            bag.move(0, SPACE);
+            }else{
+                for(Baggage bag : bags){
+                    if(cp.isLeftCollision(bag)){
+                        if(checkWallCollision(bag, BOTTOM_COLLISION)) {
+                            return true;
                         }
+                        bag.move(-SPACE,0);
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    //e.printStackTrace();
-                } catch (ClassCastException e) {
-                    //e.printStackTrace();
                 }
             }
             return false;
         }
-
         return false;
     }
     public void run(){
         while(true) {
-            synchronized (cops) {
-                repaint();
-            }
-            synchronized (thiefs) {
-                repaint();
-            }
-            try {
-                Thread.sleep(40);
-            } catch (InterruptedException ex) {
-            }
+            synchronized (cops){ repaint(); }
+            synchronized (thieves){ repaint(); }
+            try{ Thread.sleep(40); } catch (InterruptedException ignored){}
         }
     }
-    public void restartLevel() {
+    private void restartLevel() {
         areas.clear();
-        baggs.clear();
+        bags.clear();
         walls.clear();
         areac.clear();
         grs.clear();
-        tende.clear();
+        tent.clear();
         initWorld();
-        for(int i = 0; i < thiefs.size(); i++){
+        for(int i = 0; i < thieves.size(); i++){
             try{
                 releaseID(i, "ladri");
-            } catch(IndexOutOfBoundsException e){
+            } catch(IndexOutOfBoundsException ignored){
             }
         }
         for(int i = 0; i < cops.size(); i++){
             try{
                 releaseID(i, "guardie");
-            } catch(IndexOutOfBoundsException e){
+            } catch(IndexOutOfBoundsException ignored){
             }
         }
         if (completed) {
@@ -1241,19 +1033,19 @@ public class Board extends JPanel implements Runnable{
     }
     
     
-    synchronized static int getEmptyID(String team){
+    synchronized static int getEmptyID(@NotNull String team){
         int ID = 0;
         if (team.equalsIgnoreCase("ladri")) {
-            while (ID < MAXPLAYER + 1) {
-                if (id_thiefs.get(ID).equals(true)) {
+            while (ID < maxPlayers + 1) {
+                if (id_thieves.get(ID).equals(true)) {
                     System.err.println("Position found at: " + ID + " Player ID set to " + ID);
-                    id_thiefs.set(ID, false);
+                    id_thieves.set(ID, false);
                     break;
                 }
                 ID++;
             }
         } else if (team.equalsIgnoreCase("guardie")) {
-            while (ID < MAXPLAYER + 1) {
+            while (ID < maxPlayers + 1) {
                 if (id_cops.get(ID).equals(true)) {
                     System.err.println("Position found at: " + ID + " Player ID set to " + ID);
                     id_cops.set(ID, false);
@@ -1265,19 +1057,19 @@ public class Board extends JPanel implements Runnable{
         return ID; //Se torna "9" allora non ci sono posti disponibili
     }
     
-    synchronized static void randomSpawn(int PID, String team){
+    synchronized static void randomSpawn(int PID, @NotNull String team){
+        boolean found = false;
+        int k = 0;
         if(team.equalsIgnoreCase("ladri")){
             while(true) {
                 int randomspawn = ran.nextInt(areac.size());
-                AreaC c = (AreaC) areac.get(randomspawn);
-                System.err.println("Thief ArrayList size: " + thiefs.size());
+                AreaC c = areac.get(randomspawn);
+                System.err.println("Thief ArrayList size: " + thieves.size());
                 Thief chk;
-                boolean found = false;
-                int k = 0;
                 while(true){
                     try{
                         try{
-                            chk = (Thief) thiefs.get(k);
+                            chk = thieves.get(k);
                             if(chk.x() == c.x() && chk.y() == c.y()){
                                 System.out.println("Coordinates already used; X: " + c.x() + " Y: " + c.y());
                                 found = true;
@@ -1287,19 +1079,18 @@ public class Board extends JPanel implements Runnable{
                             break;
                         }
                     }
-                    catch(ClassCastException e){
+                    catch(ClassCastException ignored){
                     }
                     k++;
                 }
-                if (found == false) {
+                if (!found) {
                     Thief a = new Thief(c.x(), c.y(), PID);
                     System.err.println("Created new Thief");
                     System.err.println("X: " + c.x() + " Y: " + c.y());
                     try{
-                        thiefs.get(PID);
-                        thiefs.set(PID, a);
+                        thieves.set(PID, a);
                     }catch(IndexOutOfBoundsException e){
-                        thiefs.add(PID, a);
+                        thieves.add(PID, a);
                     }
                     break;
                 }
@@ -1307,15 +1098,13 @@ public class Board extends JPanel implements Runnable{
         }else if(team.equalsIgnoreCase("guardie")){
             while(true){
                 int randomspawn = ran.nextInt(areas.size());
-                Area a = (Area) areas.get(randomspawn);
+                Area a = areas.get(randomspawn);
                 System.err.println("Cop ArrayList size: " + cops.size());
                 Cop chk;
-                boolean found = false;
-                int k = 0;
                 while(true){
                     try{
                         try{
-                            chk = (Cop) cops.get(k);
+                            chk = cops.get(k);
                             if(chk.x() == a.x() && chk.y() == a.y()){
                                 System.out.println("Coordinates already used; X: " + a.x() + " Y: " + a.y());
                                 found = true;
@@ -1325,16 +1114,15 @@ public class Board extends JPanel implements Runnable{
                             break;
                         }
                     }
-                    catch(ClassCastException e){
+                    catch(ClassCastException ignored){
                     }
                     k++;
                 }
-                if (found == false) {
+                if (!found) {
                     Cop b = new Cop(a.x(), a.y(), PID);
                     System.err.println("Created new Cop");
                     System.err.println("X: " + a.x() + " Y: " + a.y());
                     try{
-                        cops.get(PID);
                         cops.set(PID, b);
                     }catch(IndexOutOfBoundsException e){
                         cops.add(PID, b);
@@ -1345,18 +1133,18 @@ public class Board extends JPanel implements Runnable{
         }
     }
     
-    synchronized static void releaseID(int PID, String team){
+    synchronized static void releaseID(int PID, @NotNull String team){
         if (team.equalsIgnoreCase("ladri")) {
             try{
-                id_thiefs.set(PID, true);
-                thiefs.set(PID, false);
+                id_thieves.set(PID, true);
+                thieves.remove(PID);
             }catch(IndexOutOfBoundsException e){
                 e.printStackTrace();
             }
         }else if (team.equalsIgnoreCase("guardie")) {
             try{
                 id_cops.set(PID, true);
-                cops.set(PID, false);
+                cops.remove(PID);
             }catch(IndexOutOfBoundsException e){
                 e.printStackTrace();
             }

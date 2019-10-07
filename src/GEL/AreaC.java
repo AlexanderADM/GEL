@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class AreaC extends Actor {
+class AreaC extends Actor {
 
-    public AreaC(int x, int y) {
+    AreaC(int x, int y) {
         super(x, y);
 
         URL loc = this.getClass().getResource("\\res\\spawnl.png");

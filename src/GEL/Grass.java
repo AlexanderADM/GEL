@@ -4,12 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-public class Grass extends Actor {
+class Grass extends Actor {
 
-    private Image image;
-
-    public Grass(int x, int y, String type) {
+    Grass(int x, int y, String type) {
         super(x, y);
+        Image image;
         if(type.equalsIgnoreCase("grass")) {
             URL loc = this.getClass().getResource("\\res\\grass.png");
             ImageIcon iia = new ImageIcon(loc);

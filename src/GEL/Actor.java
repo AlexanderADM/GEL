@@ -1,5 +1,8 @@
 package GEL;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Image;
 
 public class Actor {
@@ -10,6 +13,7 @@ public class Actor {
     private int y;
     private Image image;
 
+    @Contract(pure = true)
     public Actor(int x, int y) {
         this.x = x;
         this.y = y;
@@ -39,35 +43,23 @@ public class Actor {
         this.y = y;
     }
 
-    public boolean isLeftCollision(Actor actor) {
-        if (((this.x() - SPACE) == actor.x()) && (this.y() == actor.y())) {
-            return true;
-        } else {
-            return false;
-        }
+//    boolean checkCollision(Actor actor, int type){
+//        return false;
+//    }
+
+    boolean isLeftCollision(@NotNull Actor actor) {
+        return ((this.x() - SPACE) == actor.x()) && (this.y() == actor.y());
     }
 
-    public boolean isRightCollision(Actor actor) {
-        if (((this.x() + SPACE) == actor.x()) && (this.y() == actor.y())) {
-            return true;
-        } else {
-            return false;
-        }
+    boolean isRightCollision(@NotNull Actor actor) {
+        return ((this.x() + SPACE) == actor.x()) && (this.y() == actor.y());
     }
 
-    public boolean isTopCollision(Actor actor) {
-        if (((this.y() - SPACE) == actor.y()) && (this.x() == actor.x())) {
-            return true;
-        } else {
-            return false;
-        }
+    boolean isTopCollision(@NotNull Actor actor) {
+        return ((this.y() - SPACE) == actor.y()) && (this.x() == actor.x());
     }
 
-    public boolean isBottomCollision(Actor actor) {
-        if (((this.y() + SPACE) == actor.y()) && (this.x() == actor.x())) {
-            return true;
-        } else {
-            return false;
-        }
+    boolean isBottomCollision(@NotNull Actor actor) {
+        return ((this.y() + SPACE) == actor.y()) && (this.x() == actor.x());
     }
 }
