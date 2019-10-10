@@ -10,7 +10,7 @@ public class ClientThread implements Runnable{
     private Socket s;
     private int PID; // Unique ID per player
     // Starting Client Thread
-    public ClientThread(Socket conn){
+    ClientThread(Socket conn){
         s = conn;
         new Thread(this).start();
     }

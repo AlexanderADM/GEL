@@ -14,15 +14,20 @@ import javax.swing.JPanel;
 public class Board extends JPanel implements Runnable{
 
     private static final int SPACE = 20;
-    private static final int LEFT_COLLISION = 1;
+    private static final int LEFT_COLLISION;
     private static final int RIGHT_COLLISION;
+    private static final int TOP_COLLISION;
+    private static final int BOTTOM_COLLISION;
+    private static final int maxPlayers;
 
     static {
+        LEFT_COLLISION = 1;
         RIGHT_COLLISION = 2;
+        TOP_COLLISION = 3;
+        BOTTOM_COLLISION = 4;
+        maxPlayers = 9;
     }
 
-    private static final int TOP_COLLISION = 3;
-    private static final int BOTTOM_COLLISION = 4;
     private static final Random ran = new Random();
     private static final ArrayList<Wall> walls = new ArrayList<Wall>();
     private static final ArrayList<Grass> grs = new ArrayList<Grass>();
@@ -30,9 +35,8 @@ public class Board extends JPanel implements Runnable{
     private static final ArrayList<Baggage> bags = new ArrayList<Baggage>();
     private static final ArrayList<Area> areas = new ArrayList<Area>();
     private static final ArrayList<AreaC> areac = new ArrayList<AreaC>();
-    static final ArrayList<Thief> thieves = new ArrayList<Thief>();
-    static final ArrayList<Cop> cops = new ArrayList<Cop>();
-    private static final int maxPlayers = 9;
+    static final ArrayList<Player> thieves = new ArrayList<Player>();
+    static final ArrayList<Player> cops = new ArrayList<Player>();
     private static final ArrayList<Boolean> id_thieves = new ArrayList<>();
     private static final ArrayList<Boolean> id_cops;
 
@@ -47,7 +51,7 @@ public class Board extends JPanel implements Runnable{
     private int h = 0;
     private static boolean completed = false;
 
-    public Board() {
+    Board() {
         addKeyListener(new TAdapter());
         setFocusable(true);
         initWorld();
@@ -84,9 +88,8 @@ public class Board extends JPanel implements Runnable{
         Baggage b;
         Area a;
         AreaC e;
-        Cop c;
-        Thief d;
-
+        Player c;
+        Player d;
 
         String level = "<=====================================================>\n"
                 + "[£££££££[?????????????????????????????????????????????[\n"
@@ -180,11 +183,11 @@ public class Board extends JPanel implements Runnable{
                 x += SPACE;
             } else if (item == '@') {
                 //soko = new Thief(x, y, 0);
-                d = new Thief(x, y, 0);
+                d = new Player(x, y, 0,1);
                 thieves.add(d);
                 x += SPACE;
             }else if  (item == '%'){
-                c = new Cop(x, y, 0);
+                c = new Player(x, y, 0,0);
                 cops.add(c);
                 x += SPACE;
             }else if (item == ' ') {
@@ -545,7 +548,7 @@ public class Board extends JPanel implements Runnable{
 
         for (Actor o : world) {
 
-            if ((o instanceof Thief) || (o instanceof Baggage)) {
+            if ((o instanceof Player) || (o instanceof Baggage)) {
                 g.drawImage(o.getImage(), o.x(), o.y(), this);
             } else {
                 g.drawImage(o.getImage(), o.x(), o.y(), this);
@@ -630,7 +633,7 @@ public class Board extends JPanel implements Runnable{
     synchronized static boolean movePlayer(int PID, @NotNull String team, String direction){
         try{
             if(team.equalsIgnoreCase("ladri")) {
-                Thief thief = thieves.get(PID);
+                Player thief = thieves.get(PID);
                 if (direction.equalsIgnoreCase("W")) {
                     if (checkWallCollision(thief, TOP_COLLISION)) {
                         return true;
@@ -641,7 +644,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
                         return false;
                     }
-                    thief.move(0, -SPACE, "u", PID);
+                    thief.move(0, -SPACE, "u");
                 } else if (direction.equalsIgnoreCase("S")) {
                     if (checkWallCollision(thief, BOTTOM_COLLISION)) {
                         return true;
@@ -652,7 +655,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
                         return false;
                     }
-                    thief.move(0, SPACE, "d", PID);
+                    thief.move(0, SPACE, "d");
                 } else if (direction.equalsIgnoreCase("A")) {
                     if (checkWallCollision(thief, LEFT_COLLISION)) {
                         return true;
@@ -663,7 +666,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
                         return false;
                     }
-                    thief.move(-SPACE, 0, "l", PID);
+                    thief.move(-SPACE, 0, "l");
                 } else if (direction.equalsIgnoreCase("D")) {
                     if (checkWallCollision(thief, RIGHT_COLLISION)) {
                         return true;
@@ -674,11 +677,11 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
                         return false;
                     }
-                    thief.move(SPACE, 0, "r", PID);
+                    thief.move(SPACE, 0, "r");
                 }
                 isSafe(PID);
             }else if(team.equalsIgnoreCase("guardie")){
-                Cop cp = cops.get(PID);
+                Player cp = cops.get(PID);
                 if (direction.equalsIgnoreCase("W")) {
                     if (checkWallCollision(cp, TOP_COLLISION)) {
                         return true;
@@ -689,7 +692,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, TOP_COLLISION)) {
                         return true;
                     }
-                    cp.move(0, -SPACE, "u", PID);
+                    cp.move(0, -SPACE, "u");
                 } else if (direction.equalsIgnoreCase("S")) {
                     if (checkWallCollision(cp, BOTTOM_COLLISION)) {
                         return true;
@@ -700,7 +703,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, BOTTOM_COLLISION)) {
                         return true;
                     }
-                    cp.move(0, SPACE, "d", PID);
+                    cp.move(0, SPACE, "d");
                 } else if (direction.equalsIgnoreCase("A")) {
                     if (checkWallCollision(cp, LEFT_COLLISION)) {
                         return true;
@@ -711,7 +714,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, LEFT_COLLISION)) {
                         return true;
                     }
-                    cp.move(-SPACE, 0, "l", PID);
+                    cp.move(-SPACE, 0, "l");
                 } else if (direction.equalsIgnoreCase("D")) {
                     if (checkWallCollision(cp, RIGHT_COLLISION)) {
                         return true;
@@ -722,7 +725,7 @@ public class Board extends JPanel implements Runnable{
                     if (checkPlayerCollision(PID, team, RIGHT_COLLISION)) {
                         return true;
                     }
-                    cp.move(SPACE, 0, "r", PID);
+                    cp.move(SPACE, 0, "r");
                 }
             }
         }catch(ClassCastException e){
@@ -731,7 +734,7 @@ public class Board extends JPanel implements Runnable{
         return true;
     }
     private static void isSafe(int PID){
-        Thief th = thieves.get(PID);
+        Player th = thieves.get(PID);
         Area zone;
         for (Area area : areas) {
             zone = area;
@@ -753,7 +756,7 @@ public class Board extends JPanel implements Runnable{
         long timeNew;
         long timeOld = System.currentTimeMillis();
         int PID = 0;
-        Cop p;
+        Player p;
         boolean check = false;        
         if(cops.size() != 0) {
             for (int i = 0; i < cops.size(); i++) {
@@ -776,9 +779,9 @@ public class Board extends JPanel implements Runnable{
     }
     private static boolean checkPlayerCollision(int PID, @NotNull String team, int type){
         if(team.equalsIgnoreCase("ladri")) {
-            Thief th = thieves.get(PID);
+            Player th = thieves.get(PID);
             if (type == LEFT_COLLISION) {
-                for (Cop o : cops) {
+                for (Player o : cops) {
                     try {
                         if (th.isLeftCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
@@ -790,7 +793,7 @@ public class Board extends JPanel implements Runnable{
                 }
                 return false;
             } else if (type == RIGHT_COLLISION) {
-                for (Cop o : cops) {
+                for (Player o : cops) {
                     try {
                         if (th.isRightCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
@@ -801,7 +804,7 @@ public class Board extends JPanel implements Runnable{
                     }
                 }
             } else if (type == TOP_COLLISION) {
-                for (Cop o : cops) {
+                for (Player o : cops) {
                     try {
                         if (th.isTopCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
@@ -812,7 +815,7 @@ public class Board extends JPanel implements Runnable{
                     }
                 }
             } else if (type == BOTTOM_COLLISION) {
-                for (Cop o : cops) {
+                for (Player o : cops) {
                     try {
                         if (th.isBottomCollision(o)) {
                             System.err.println("ID: " + PID + " collided with cop");
@@ -824,11 +827,11 @@ public class Board extends JPanel implements Runnable{
                 }
             }
         }else if(team.equalsIgnoreCase("guardie")){
-            Cop cp = cops.get(PID);
+            Player cp = cops.get(PID);
             if(type == BOTTOM_COLLISION){
                 for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = thieves.get(i);
+                        Player th = thieves.get(i);
                         if (cp.isBottomCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
@@ -840,7 +843,7 @@ public class Board extends JPanel implements Runnable{
             }else if(type == TOP_COLLISION){
                 for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = thieves.get(i);
+                        Player th = thieves.get(i);
                         if (cp.isTopCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
@@ -852,7 +855,7 @@ public class Board extends JPanel implements Runnable{
             }else if(type == RIGHT_COLLISION){
                 for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = thieves.get(i);
+                        Player th = thieves.get(i);
                         if (cp.isRightCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
@@ -864,7 +867,7 @@ public class Board extends JPanel implements Runnable{
             }else if(type == LEFT_COLLISION){
                 for (int i = 0; i < thieves.size(); i++) {
                     try{
-                        Thief th = thieves.get(i);
+                        Player th = thieves.get(i);
                         if (cp.isLeftCollision(th)) {
                             System.err.println("ID: " + PID +" collided with thief.");
                             releaseID(i, "ladri");
@@ -911,8 +914,8 @@ public class Board extends JPanel implements Runnable{
     }
 
     private static boolean checkBagCollision(int PID,String team, int type) {
-        Thief th = thieves.get(PID);
-        Cop cp = cops.get(PID);
+        Player th = thieves.get(PID);
+        Player cp = cops.get(PID);
         if (type == LEFT_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
                 for(Baggage bag : bags){
@@ -1065,7 +1068,7 @@ public class Board extends JPanel implements Runnable{
                 int randomspawn = ran.nextInt(areac.size());
                 AreaC c = areac.get(randomspawn);
                 System.err.println("Thief ArrayList size: " + thieves.size());
-                Thief chk;
+                Player chk;
                 while(true){
                     try{
                         try{
@@ -1084,7 +1087,7 @@ public class Board extends JPanel implements Runnable{
                     k++;
                 }
                 if (!found) {
-                    Thief a = new Thief(c.x(), c.y(), PID);
+                    Player a = new Player(c.x(), c.y(), PID,1);
                     System.err.println("Created new Thief");
                     System.err.println("X: " + c.x() + " Y: " + c.y());
                     try{
@@ -1100,7 +1103,7 @@ public class Board extends JPanel implements Runnable{
                 int randomspawn = ran.nextInt(areas.size());
                 Area a = areas.get(randomspawn);
                 System.err.println("Cop ArrayList size: " + cops.size());
-                Cop chk;
+                Player chk;
                 while(true){
                     try{
                         try{
@@ -1119,7 +1122,7 @@ public class Board extends JPanel implements Runnable{
                     k++;
                 }
                 if (!found) {
-                    Cop b = new Cop(a.x(), a.y(), PID);
+                    Player b = new Player(a.x(), a.y(), PID,0);
                     System.err.println("Created new Cop");
                     System.err.println("X: " + a.x() + " Y: " + a.y());
                     try{

@@ -23,7 +23,7 @@ public class Actor {
         return this.image;
     }
 
-    public void setImage(Image img) {
+    void setImage(Image img) {
         image = img;
     }
 
