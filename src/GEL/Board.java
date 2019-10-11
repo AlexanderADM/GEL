@@ -940,20 +940,20 @@ public class Board extends JPanel implements Runnable{
         }else if (type == RIGHT_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
                 for(Baggage bag : bags){
-                    if(th.isLeftCollision(bag)){
+                    if(th.isRightCollision(bag)){
                         if(checkWallCollision(bag, RIGHT_COLLISION)) {
                             return true;
                         }
-                        bag.move(-SPACE,0);
+                        bag.move(SPACE,0);
                     }
                 }
             }else{
                 for(Baggage bag : bags){
-                    if(cp.isLeftCollision(bag)){
+                    if(cp.isRightCollision(bag)){
                         if(checkWallCollision(bag, RIGHT_COLLISION)) {
                             return true;
                         }
-                        bag.move(-SPACE,0);
+                        bag.move(SPACE,0);
                     }
                 }
             }
@@ -961,20 +961,20 @@ public class Board extends JPanel implements Runnable{
         } else if (type == TOP_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
                 for(Baggage bag : bags){
-                    if(th.isLeftCollision(bag)){
+                    if(th.isTopCollision(bag)){
                         if(checkWallCollision(bag, TOP_COLLISION)) {
                             return true;
                         }
-                        bag.move(-SPACE,0);
+                        bag.move(0,-SPACE);
                     }
                 }
             }else{
                 for(Baggage bag : bags){
-                    if(cp.isLeftCollision(bag)){
-                        if(checkWallCollision(bag, RIGHT_COLLISION)) {
+                    if(cp.isTopCollision(bag)){
+                        if(checkWallCollision(bag, TOP_COLLISION)) {
                             return true;
                         }
-                        bag.move(-SPACE,0);
+                        bag.move(0,-SPACE);
                     }
                 }
             }
@@ -982,20 +982,20 @@ public class Board extends JPanel implements Runnable{
         } else if (type == BOTTOM_COLLISION) {
             if(team.equalsIgnoreCase("ladri")) {
                 for(Baggage bag : bags){
-                    if(th.isLeftCollision(bag)){
+                    if(th.isBottomCollision(bag)){
                         if(checkWallCollision(bag, BOTTOM_COLLISION)) {
                             return true;
                         }
-                        bag.move(-SPACE,0);
+                        bag.move(0,SPACE);
                     }
                 }
             }else{
                 for(Baggage bag : bags){
-                    if(cp.isLeftCollision(bag)){
+                    if(cp.isBottomCollision(bag)){
                         if(checkWallCollision(bag, BOTTOM_COLLISION)) {
                             return true;
                         }
-                        bag.move(-SPACE,0);
+                        bag.move(0,SPACE);
                     }
                 }
             }
