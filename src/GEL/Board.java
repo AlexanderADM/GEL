@@ -33,8 +33,8 @@ public class Board extends JPanel implements Runnable{
     private static final ArrayList<Texture> grs = new ArrayList<Texture>();
     private static final ArrayList<Texture> tent = new ArrayList<Texture>();
     private static final ArrayList<Baggage> bags = new ArrayList<Baggage>();
-    private static final ArrayList<Area> areas = new ArrayList<Area>();
-    private static final ArrayList<AreaC> areac = new ArrayList<AreaC>();
+    private static final ArrayList<Texture> areas = new ArrayList<Texture>();
+    private static final ArrayList<Texture> areac = new ArrayList<Texture>();
     static final ArrayList<Player> thieves = new ArrayList<Player>();
     static final ArrayList<Player> cops = new ArrayList<Player>();
     private static final ArrayList<Boolean> id_thieves = new ArrayList<>();
@@ -86,8 +86,8 @@ public class Board extends JPanel implements Runnable{
         Texture grass;
         Texture tenda;
         Baggage b;
-        Area a;
-        AreaC e;
+        Texture a;
+        Texture e;
         Player c;
         Player d;
 
@@ -174,11 +174,11 @@ public class Board extends JPanel implements Runnable{
                 bags.add(b);
                 x += SPACE;
             } else if (item == '.') {
-                a = new Area(x, y);
+                a = new Texture(x, y, "spawnl");
                 areas.add(a);
                 x += SPACE;
             } else if(item == '£'){
-                e = new AreaC(x, y);
+                e = new Texture(x, y, "spawng");
                 areac.add(e);
                 x += SPACE;
             } else if (item == '@') {
@@ -735,8 +735,8 @@ public class Board extends JPanel implements Runnable{
     }
     private static void isSafe(int PID){
         Player th = thieves.get(PID);
-        Area zone;
-        for (Area area : areas) {
+        Texture zone;
+        for (Texture area : areas) {
             zone = area;
             if (zone.x() == th.x() && zone.y() == th.y()) {
                 System.err.println("Thief ID: " + PID + " is in the safe zone.");
@@ -1066,7 +1066,7 @@ public class Board extends JPanel implements Runnable{
         if(team.equalsIgnoreCase("ladri")){
             while(true) {
                 int randomspawn = ran.nextInt(areac.size());
-                AreaC c = areac.get(randomspawn);
+                Texture c = areac.get(randomspawn);
                 System.err.println("Thief ArrayList size: " + thieves.size());
                 Player chk;
                 while(true){
@@ -1101,7 +1101,7 @@ public class Board extends JPanel implements Runnable{
         }else if(team.equalsIgnoreCase("guardie")){
             while(true){
                 int randomspawn = ran.nextInt(areas.size());
-                Area a = areas.get(randomspawn);
+                Texture a = areas.get(randomspawn);
                 System.err.println("Cop ArrayList size: " + cops.size());
                 Player chk;
                 while(true){
