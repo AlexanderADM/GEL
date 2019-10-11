@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Image;
 
-public class Actor {
+class Actor {
 
     private final int SPACE = 20;
 
@@ -14,12 +14,12 @@ public class Actor {
     private Image image;
 
     @Contract(pure = true)
-    public Actor(int x, int y) {
+    Actor(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Image getImage() {
+    Image getImage() {
         return this.image;
     }
 
@@ -27,19 +27,19 @@ public class Actor {
         image = img;
     }
 
-    public int x() {
+    int x() {
         return this.x;
     }
 
-    public int y() {
+    int y() {
         return this.y;
     }
 
-    public void setX(int x) {
+    void setX(int x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    void setY(int y) {
         this.y = y;
     }
 

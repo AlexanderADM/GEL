@@ -3,17 +3,16 @@ package GEL;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.JPanel;
 
 public class Board extends JPanel implements Runnable{
 
-    private static final int SPACE = 20;
+    private static final int SPACE;
     private static final int LEFT_COLLISION;
     private static final int RIGHT_COLLISION;
     private static final int TOP_COLLISION;
@@ -21,6 +20,7 @@ public class Board extends JPanel implements Runnable{
     private static final int maxPlayers;
 
     static {
+        SPACE = 20;
         LEFT_COLLISION = 1;
         RIGHT_COLLISION = 2;
         TOP_COLLISION = 3;
@@ -29,9 +29,9 @@ public class Board extends JPanel implements Runnable{
     }
 
     private static final Random ran = new Random();
-    private static final ArrayList<Wall> walls = new ArrayList<Wall>();
-    private static final ArrayList<Grass> grs = new ArrayList<Grass>();
-    private static final ArrayList<Tenda> tent = new ArrayList<Tenda>();
+    private static final ArrayList<Texture> walls = new ArrayList<Texture>();
+    private static final ArrayList<Texture> grs = new ArrayList<Texture>();
+    private static final ArrayList<Texture> tent = new ArrayList<Texture>();
     private static final ArrayList<Baggage> bags = new ArrayList<Baggage>();
     private static final ArrayList<Area> areas = new ArrayList<Area>();
     private static final ArrayList<AreaC> areac = new ArrayList<AreaC>();
@@ -82,9 +82,9 @@ public class Board extends JPanel implements Runnable{
         int x = OFFSET;
         int y = OFFSET;
         
-        Wall wall;
-        Grass grass;
-        Tenda tenda;
+        Texture wall;
+        Texture grass;
+        Texture tenda;
         Baggage b;
         Area a;
         AreaC e;
@@ -134,39 +134,39 @@ public class Board extends JPanel implements Runnable{
                 }
                 x = OFFSET;
             }else if (item == '#') {
-                wall = new Wall(x, y, "wall");
+                wall = new Texture(x, y, "wall");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '-') {
-                grass = new Grass(x, y, "grass");
+                grass = new Texture(x, y, "grass");
                 grs.add(grass);
                 x += SPACE;
             }else if (item == '[') {
-                wall = new Wall(x, y, "siepev");
+                wall = new Texture(x, y, "siepev");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '=') {
-                wall = new Wall(x, y,"siepe");
+                wall = new Texture(x, y,"siepe");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '{') {
-                wall = new Wall(x, y,"siepeasw");
+                wall = new Texture(x, y,"siepeasw");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '}') {
-                wall = new Wall(x, y,"siepease");
+                wall = new Texture(x, y,"siepease");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '<') {
-                wall = new Wall(x, y,"siepeanw");
+                wall = new Texture(x, y,"siepeanw");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '>') {
-                wall = new Wall(x, y,"siepeane");
+                wall = new Texture(x, y,"siepeane");
                 walls.add(wall);
                 x += SPACE;
             }else if(item == '+'){
-                wall = new Wall(x, y,"water");
+                wall = new Texture(x, y,"water");
                 walls.add(wall);
                 x += SPACE;
             } else if (item == '$') {
@@ -193,335 +193,335 @@ public class Board extends JPanel implements Runnable{
             }else if (item == ' ') {
                 x += SPACE;
             }else if (item == 'z') {
-                wall = new Wall(x, y,"casa1");
+                wall = new Texture(x, y,"casa1");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'x') {
-                wall = new Wall(x, y,"casa2");
+                wall = new Texture(x, y,"casa2");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'c') {
-                wall = new Wall(x, y,"casa3");
+                wall = new Texture(x, y,"casa3");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'a') {
-                wall = new Wall(x, y,"casa4");
+                wall = new Texture(x, y,"casa4");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'd') {
-                wall = new Wall(x, y,"casa5");
+                wall = new Texture(x, y,"casa5");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 's') {
-                wall = new Wall(x, y,"casa6");
+                wall = new Texture(x, y,"casa6");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '`') {
-                wall = new Wall(x, y,"casa7");
+                wall = new Texture(x, y,"casa7");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'Z') {
-                wall = new Wall(x, y,"tetto1");
+                wall = new Texture(x, y,"tetto1");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'X') {
-                wall = new Wall(x, y,"tetto2");
+                wall = new Texture(x, y,"tetto2");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'C') {
-                wall = new Wall(x, y,"tetto3");
+                wall = new Texture(x, y,"tetto3");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'A') {
-                wall = new Wall(x, y,"tetto4");
+                wall = new Texture(x, y,"tetto4");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'S') {
-                wall = new Wall(x, y,"tetto5");
+                wall = new Texture(x, y,"tetto5");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'D') {
-                wall = new Wall(x, y,"tetto6");
+                wall = new Texture(x, y,"tetto6");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'Q') {
-                wall = new Wall(x, y,"tetto7");
+                wall = new Texture(x, y,"tetto7");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'W') {
-                wall = new Wall(x, y,"tetto8");
+                wall = new Texture(x, y,"tetto8");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'E') {
-                wall = new Wall(x, y,"tetto9");
+                wall = new Texture(x, y,"tetto9");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'b') {
-                wall = new Wall(x, y,"cb1");
+                wall = new Texture(x, y,"cb1");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'n') {
-                wall = new Wall(x, y,"cb2");
+                wall = new Texture(x, y,"cb2");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'm') {
-                wall = new Wall(x, y,"cb3");
+                wall = new Texture(x, y,"cb3");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'g') {
-                wall = new Wall(x, y,"cb4");
+                wall = new Texture(x, y,"cb4");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'h') {
-                wall = new Wall(x, y,"cb5");
+                wall = new Texture(x, y,"cb5");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'j') {
-                wall = new Wall(x, y,"cb6");
+                wall = new Texture(x, y,"cb6");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 't') {
-                wall = new Wall(x, y,"cb7");
+                wall = new Texture(x, y,"cb7");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'y') {
-                wall = new Wall(x, y,"cb8");
+                wall = new Texture(x, y,"cb8");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'u') {
-                wall = new Wall(x, y,"cb9");
+                wall = new Texture(x, y,"cb9");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'M') {
-                wall = new Wall(x, y,"angse");
+                wall = new Texture(x, y,"angse");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'B') {
-                wall = new Wall(x, y,"angsw");
+                wall = new Texture(x, y,"angsw");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'I') {
-                wall = new Wall(x, y,"angnw");
+                wall = new Texture(x, y,"angnw");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'P') {
-                wall = new Wall(x, y,"angne");
+                wall = new Texture(x, y,"angne");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'J') {
-                wall = new Wall(x, y,"ws");
+                wall = new Texture(x, y,"ws");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'O') {
-                wall = new Wall(x, y,"wt");
+                wall = new Texture(x, y,"wt");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'L') {
-                wall = new Wall(x, y,"wd");
+                wall = new Texture(x, y,"wd");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'N') {
-                wall = new Wall(x, y,"wst");
+                wall = new Texture(x, y,"wst");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '?') {
-                grass = new Grass(x, y, "pietra");
+                grass = new Texture(x, y, "pietra");
                 grs.add(grass);
                 x += SPACE;
             }else if (item == '~') {
-                grass = new Grass(x, y, "porta");
+                grass = new Texture(x, y, "porta");
                 grs.add(grass);
                 x += SPACE;
             }else if (item == '*') {
-                wall = new Wall(x, y,"piantina");
+                wall = new Texture(x, y,"piantina");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '1') {
-                wall = new Wall(x, y,"tenda1");
+                wall = new Texture(x, y,"tenda1");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '2') {
-                grass = new Grass(x, y,"tenda2");
+                grass = new Texture(x, y,"tenda2");
                 grs.add(grass);
                 x += SPACE;
             }else if (item == '3') {
-                wall = new Wall(x, y,"tenda3");
+                wall = new Texture(x, y,"tenda3");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '4') {
-                tenda = new Tenda(x, y,"tenda4");
+                tenda = new Texture(x, y,"tenda4");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '5') {
-                tenda = new Tenda(x, y,"tenda5");
+                tenda = new Texture(x, y,"tenda5");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '6') {
-                tenda = new Tenda(x, y,"tenda6");
+                tenda = new Texture(x, y,"tenda6");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '7') {
-                tenda = new Tenda(x, y,"tenda7");
+                tenda = new Texture(x, y,"tenda7");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '8') {
-                tenda = new Tenda(x, y,"tenda8");
+                tenda = new Texture(x, y,"tenda8");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '9') {
-                tenda = new Tenda(x, y,"tenda9");
+                tenda = new Texture(x, y,"tenda9");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '0') {
-                tenda = new Tenda(x, y,"tenda0");
+                tenda = new Texture(x, y,"tenda0");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '&') {
-                tenda = new Tenda(x, y,"tenda11");
+                tenda = new Texture(x, y,"tenda11");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '¬') {
-                tenda = new Tenda(x, y,"tenda12");
+                tenda = new Texture(x, y,"tenda12");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'è') {
-                tenda = new Tenda(x, y,"tenda13");
+                tenda = new Texture(x, y,"tenda13");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'ò') {
-                tenda = new Tenda(x, y,"tenda14");
+                tenda = new Texture(x, y,"tenda14");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'à') {
-                tenda = new Tenda(x, y,"tenda15");
+                tenda = new Texture(x, y,"tenda15");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Ñ') {
-                tenda = new Tenda(x, y,"tendina1");
+                tenda = new Texture(x, y,"tendina1");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Á') {
-                tenda = new Tenda(x, y,"tendina2");
+                tenda = new Texture(x, y,"tendina2");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'ÿ') {
-                tenda = new Tenda(x, y,"tendina3");
+                tenda = new Texture(x, y,"tendina3");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Õ') {
-                tenda = new Tenda(x, y,"tendina4");
+                tenda = new Texture(x, y,"tendina4");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Ì') {
-                tenda = new Tenda(x, y,"tendina5");
+                tenda = new Texture(x, y,"tendina5");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == 'Ö') {
-                tenda = new Tenda(x, y,"tendina6");
+                tenda = new Texture(x, y,"tendina6");
                 tent.add(tenda);
                 x += SPACE;
             }else if (item == '^') {
-                grass = new Grass(x, y, "fiorellino");
+                grass = new Texture(x, y, "fiorellino");
                 grs.add(grass);
                 x += SPACE;
             }else if (item == '_') {
-                wall = new Wall(x, y, "pala1");
+                wall = new Texture(x, y, "pala1");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '•') {
-                wall = new Wall(x, y, "pala2");
+                wall = new Texture(x, y, "pala2");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '◘') {
-                wall = new Wall(x, y, "pala3");
+                wall = new Texture(x, y, "pala3");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '○') {
-                wall = new Wall(x, y, "pala4");
+                wall = new Texture(x, y, "pala4");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '◙') {
-                wall = new Wall(x, y, "pala5");
+                wall = new Texture(x, y, "pala5");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '♂') {
-                wall = new Wall(x, y, "pala6");
+                wall = new Texture(x, y, "pala6");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '♀') {
-                wall = new Wall(x, y, "pala7");
+                wall = new Texture(x, y, "pala7");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '♪') {
-                wall = new Wall(x, y, "pala8");
+                wall = new Texture(x, y, "pala8");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '♫') {
-                wall = new Wall(x, y, "pala9");
+                wall = new Texture(x, y, "pala9");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '☼') {
-                wall = new Wall(x, y, "pala10");
+                wall = new Texture(x, y, "pala10");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '►') {
-                wall = new Wall(x, y, "pala11");
+                wall = new Texture(x, y, "pala11");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '◄') {
-                wall = new Wall(x, y, "pala12");
+                wall = new Texture(x, y, "pala12");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '↕') {
-                wall = new Wall(x, y, "pala13");
+                wall = new Texture(x, y, "pala13");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '‼') {
-                wall = new Wall(x, y, "pala14");
+                wall = new Texture(x, y, "pala14");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '¶') {
-                wall = new Wall(x, y, "pala15");
+                wall = new Texture(x, y, "pala15");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '§') {
-                wall = new Wall(x, y, "pala16");
+                wall = new Texture(x, y, "pala16");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '▬') {
-                wall = new Wall(x, y, "pala17");
+                wall = new Texture(x, y, "pala17");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '↑') {
-                wall = new Wall(x, y, "pala18");
+                wall = new Texture(x, y, "pala18");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '▲') {
-                wall = new Wall(x, y, "pala19");
+                wall = new Texture(x, y, "pala19");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '¡') {
-                wall = new Wall(x, y, "pala20");
+                wall = new Texture(x, y, "pala20");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '¢') {
-                wall = new Wall(x, y, "pala21");
+                wall = new Texture(x, y, "pala21");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '¤') {
-                wall = new Wall(x, y, "pala22");
+                wall = new Texture(x, y, "pala22");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == 'Å') {
-                wall = new Wall(x, y, "pala23");
+                wall = new Texture(x, y, "pala23");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '©') {
-                wall = new Wall(x, y, "pala24");
+                wall = new Texture(x, y, "pala24");
                 walls.add(wall);
                 x += SPACE;
             }else if (item == '®') {
-                wall = new Wall(x, y, "pala25");
+                wall = new Texture(x, y, "pala25");
                 walls.add(wall);
                 x += SPACE;
             }
@@ -882,28 +882,28 @@ public class Board extends JPanel implements Runnable{
     }
     private static boolean checkWallCollision(Actor actor, int type) {
         if (type == LEFT_COLLISION) {
-            for (Wall o : walls) {
+            for (Texture o : walls) {
                 if (actor.isLeftCollision(o)) {
                     return true;
                 }
             }
             return false;
         } else if (type == RIGHT_COLLISION) {
-            for (Wall o : walls) {
+            for (Texture o : walls) {
                 if (actor.isRightCollision(o)) {
                     return true;
                 }
             }
             return false;
         } else if (type == TOP_COLLISION) {
-            for (Wall o : walls) {
+            for (Texture o : walls) {
                 if (actor.isTopCollision(o)) {
                     return true;
                 }
             }
             return false;
         } else if (type == BOTTOM_COLLISION) {
-            for (Wall o : walls) {
+            for (Texture o : walls) {
                 if (actor.isBottomCollision(o)) {
                     return true;
                 }

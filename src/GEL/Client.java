@@ -128,7 +128,7 @@ public class Client extends javax.swing.JFrame{
                     pw.flush();
                     String mess = br.readLine();
                     if(mess.equalsIgnoreCase("ok")) {
-                        System.err.println("Test");
+                        System.err.println("Connection successful!");
                         pw.println(name.getText());
                         pw.flush();
                         Play.setText("Esci");
